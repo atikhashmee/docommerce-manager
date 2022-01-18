@@ -5,7 +5,8 @@ export const COLORS = {
     // base colors
     primary: '#81368f', // Red
     secondary: '#cacfd9', // Gray
-
+    background: '#f4e8f6',
+    nero: '#231F20',
     // colors
     black: '#1E1F20',
     white: '#FFFFFF',

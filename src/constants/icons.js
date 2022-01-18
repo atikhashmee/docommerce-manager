@@ -21,6 +21,9 @@ const Lock = <FontAwesomeIcon name="lock" size={20} color={'#fff'} />;
 const eye = <FontAwesomeIcon name="eye" size={20} color={'#000'} />;
 const eye_slash = <FontAwesomeIcon name="eye-slash" size={20} color={'#000'} />;
 const align_left = <FeatherIcon name="align-left" size={25} color={'#81368f'} />;
+const users = <FeatherIcon name="users" size={30} color={'#81368f'} />;
+const globe = <FeatherIcon name="globe" size={30} color={'#81368f'} />;
+const money = <FontAwesomeIcon name="money" size={30} color={'#81368f'} />;
 
 export default {
     logo,
@@ -34,4 +37,7 @@ export default {
     eye,
     eye_slash,
     align_left,
+    users,
+    globe,
+    money,
 };
