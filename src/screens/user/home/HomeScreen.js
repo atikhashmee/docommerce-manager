@@ -16,10 +16,8 @@ class HomeScreen extends Component {
     render() {
         return (
             <View style={Styles.container}>
-                <Header navigation={this.props.navigation} title="Home" />
-
+                <Header navigation={this.props.navigation} />
                 <Spinner visible={this.state.spinner} textContent={'Loading...'} />
-
                 <View style={Styles.centerMiddleContainer}>
                     <Text>Home Screen</Text>
                 </View>

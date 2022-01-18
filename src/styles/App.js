@@ -55,4 +55,9 @@ export default StyleSheet.create({
         shadowRadius: 3.84,
         elevation: 3, // For Android
     },
+    logo: {
+        alignSelf: 'center',
+        height: 40,
+        width: '100%',
+    },
 });

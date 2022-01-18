@@ -13,8 +13,8 @@ class BeforeAuth extends Component {
             <>
                 <StatusBar backgroundColor={COLORS.primary} barStyle="light-content" />
                 <Stack.Navigator headerMode="none">
-                    <Stack.Screen name="LandingScreen" component={LandingScreen} />
                     <Stack.Screen name="SignIn" component={SignIn} />
+                    <Stack.Screen name="LandingScreen" component={LandingScreen} />
                 </Stack.Navigator>
             </>
         );

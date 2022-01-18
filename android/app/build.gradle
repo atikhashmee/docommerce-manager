@@ -132,7 +132,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.reactnativetemplate"
+        applicationId "com.docommerce.manager"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

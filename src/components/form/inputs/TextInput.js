@@ -14,7 +14,6 @@ class TextInput extends Component {
             <View style={styles.container}>
                 <RNTextInput
                     mode="outlined"
-                    secureTextEntry={false}
                     placeholderTextColor={COLORS.gray}
                     style={{...styles.textInput, ...this.props.style}}
                     autoCapitalize="none"

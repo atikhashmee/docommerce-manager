@@ -5,6 +5,9 @@
 // export const gallery = require('../assets/icons/gallery.png');
 // export const upload_document = require('../assets/icons/upload_document.png');
 // export const two_way_arrows = require('../assets/icons/two-way-arrows.png');
+import React from 'react';
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import FeatherIcon from 'react-native-vector-icons/Feather';
 
 export const logo = null;
 export const logo_white = null;
@@ -14,6 +17,11 @@ export const gallery = null;
 export const upload_document = null;
 export const two_way_arrows = null;
 
+const Lock = <FontAwesomeIcon name="lock" size={20} color={'#fff'} />;
+const eye = <FontAwesomeIcon name="eye" size={20} color={'#000'} />;
+const eye_slash = <FontAwesomeIcon name="eye-slash" size={20} color={'#000'} />;
+const align_left = <FeatherIcon name="align-left" size={25} color={'#81368f'} />;
+
 export default {
     logo,
     logo_white,
@@ -22,4 +30,8 @@ export default {
     gallery,
     upload_document,
     two_way_arrows,
+    Lock,
+    eye,
+    eye_slash,
+    align_left,
 };
