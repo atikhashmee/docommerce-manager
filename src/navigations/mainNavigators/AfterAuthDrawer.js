@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {COLORS} from '@constants';
 import NavStyles from '@styles/Nav';
 import {logout} from '@actions/userAction';
-import HomeScreen from '@screens/user/home/HomeScreen';
+import HomeScreenNavigator from '../navigators/HomeScreenNavigator';
 import ProfileScreen from '../navigators/ProfileScreenTabNavigator';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
@@ -17,7 +17,7 @@ class AfterAuthDrawer extends Component {
     render() {
         return (
             <DrawerCreate.Navigator backBehavior={'initialRoute'} drawerContent={(props) => <DrawerContent {...props} {...this.props} />}>
-                <DrawerCreate.Screen options={{unmountOnBlur: true}} name="HomeScreen" component={HomeScreen} />
+                <DrawerCreate.Screen options={{unmountOnBlur: true}} name="HomeScreen" component={HomeScreenNavigator} />
                 <DrawerCreate.Screen name="ProfileScreen" component={ProfileScreen} />
             </DrawerCreate.Navigator>
         );
