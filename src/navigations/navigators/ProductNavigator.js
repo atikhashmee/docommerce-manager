@@ -2,6 +2,7 @@ import React from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {COLORS} from '@constants';
 import ProductInfo from '@screens/user/products/create/ProductInfo';
+import CategoryCollection from '@screens/user/products/create/CategoryCollection';
 import EditProfile from '@screens/user/profile/Edit';
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -33,9 +34,9 @@ const ProductTabNavigator = () => {
 
             <Tab.Screen
                 name="UpdateProfile"
-                component={EditProfile}
+                component={CategoryCollection}
                 options={{
-                    tabBarLabel: 'Update Profile',
+                    tabBarLabel: 'category',
                     tabBarIcon: ({focused}) => <Icon name="square-edit-outline" color={focused ? COLORS.black : COLORS.white} size={26} />,
                 }}
             />
