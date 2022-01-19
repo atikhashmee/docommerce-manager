@@ -18,7 +18,7 @@ class CategoryCollection extends Component {
         const {spinner} = this.state;
         return (
             <View style={Styles.container}>
-                <Header navigation={this.props.navigation} title="Add New Product" />
+                <Header navigation={this.props.navigation} title="Add New Product" showBack={true} />
                 <Spinner visible={spinner} textContent={'Loading...'} />
                 <Animated.ScrollView style={[Styles.topContainer]}>
                     <Text>Category & Collection</Text>

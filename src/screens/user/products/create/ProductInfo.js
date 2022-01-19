@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
-import {Text, View} from 'react-native';
+import {View} from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Animated from 'react-native-reanimated';
 import FormGroup from '@components/form/FormGroup';
 import {connect} from 'react-redux';
 import Styles from '@styles';
 import Header from './Header';
-import styled, {css} from 'styled-components/native';
+import styled from 'styled-components/native';
 import {COLORS} from '@constants';
 
 class ProductInfo extends Component {
@@ -21,7 +21,7 @@ class ProductInfo extends Component {
         const {spinner} = this.state;
         return (
             <View style={Styles.container}>
-                <Header navigation={this.props.navigation} title="Add New Product" />
+                <Header navigation={this.props.navigation} title="Add New Product" showBack={true} />
                 <Spinner visible={spinner} textContent={'Loading...'} />
                 <AnimScrollView>
                     <Styles.PageHeader>Product Information</Styles.PageHeader>

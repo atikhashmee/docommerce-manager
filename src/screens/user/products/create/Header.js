@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {connect} from 'react-redux';
 import {Appbar} from 'react-native-paper';
 import {COLORS, icons} from '@constants';
@@ -20,18 +20,22 @@ class Header extends Component {
         return (
             <Appbar.Header style={{backgroundColor: COLORS.white}}>
                 <Appbar.Content title={this.props.title ? this.props.title : ''} style={Styles.headerContent} />
-                {this.props.showBack ? (
-                    <Appbar.BackAction onPress={this.onPressBackButton} />
-                ) : (
-                    this.props.token && <Appbar.Action icon={() => icons.align_left} onPress={() => this.props.navigation.openDrawer()} />
-                )}
-                <Appbar.Content
-                    title={'Draft'}
-                    style={{...Styles.headerContent, alignItems: 'flex-end'}}
-                    onPress={() => {
-                        alert('clicked');
-                    }}
-                />
+                <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
+                    {this.props.showBack ? (
+                        <Appbar.BackAction onPress={this.onPressBackButton} />
+                    ) : (
+                        this.props.token && <Appbar.Action icon={() => icons.align_left} onPress={() => this.props.navigation.openDrawer()} />
+                    )}
+                    <View style={{flex: 1}} />
+                    <Appbar.Content
+                        title={'Draft'}
+                        style={{flex: 0, justifyContent: 'flex-end', alignItems: 'flex-end'}}
+                        titleStyle={{color: COLORS.primary}}
+                        onPress={() => {
+                            alert('clicked');
+                        }}
+                    />
+                </View>
             </Appbar.Header>
         );
     }
