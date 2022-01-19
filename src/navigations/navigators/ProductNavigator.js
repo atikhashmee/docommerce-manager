@@ -42,7 +42,7 @@ const MyTabBar = ({state, descriptors, navigation}) => {
     };
 
     return (
-        <View style={{flexDirection: 'row', paddingVertical: 10, paddingHorizontal: 20, alignItems: 'center'}}>
+        <View style={{flexDirection: 'row', backgroundColor: COLORS.background, paddingVertical: 10, paddingHorizontal: 20, alignItems: 'center'}}>
             <>
                 <TouchableOpacity onPress={() => onPressArrow('left')}>
                     <Icon name="arrow-left" color={COLORS.black} size={40} />
@@ -74,6 +74,7 @@ const MyTabBar = ({state, descriptors, navigation}) => {
 
                         return (
                             <TouchableOpacity
+                                key={index}
                                 accessibilityRole="button"
                                 accessibilityState={isFocused ? {selected: true} : {}}
                                 accessibilityLabel={options.tabBarAccessibilityLabel}
@@ -102,7 +103,7 @@ const ProductTabNavigator = () => {
                 ...bottomTabBarOptions,
                 showLabel: false,
                 style: {
-                    backgroundColor: COLORS.primary,
+                    backgroundColor: COLORS.background,
                     borderTopWidth: 0,
                     elevation: 0, // remove shadow on Android
                     shadowOpacity: 0, // remove shadow on iOS
