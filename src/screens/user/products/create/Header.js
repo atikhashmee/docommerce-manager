@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import {StyleSheet, Image} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {connect} from 'react-redux';
 import {Appbar} from 'react-native-paper';
-import {COLORS, images, icons} from '@constants';
+import {COLORS, icons} from '@constants';
 
 class Header extends Component {
     onPressBackButton = () => {

@@ -18,7 +18,7 @@ class Header extends Component {
     };
     render() {
         return (
-            <Appbar.Header style={{backgroundColor: COLORS.white, elevation: 0}}>
+            <Appbar.Header style={{backgroundColor: COLORS.white, borderBottomWidth: 0, elevation: 0, shadowOpacity: 0}}>
                 <Appbar.Content
                     title={<Image source={images.logo} style={Styles.logo} resizeMode="stretch" />}
                     style={Styles.headerContent}

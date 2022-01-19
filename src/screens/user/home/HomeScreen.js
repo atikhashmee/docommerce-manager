@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View, SafeAreaView, ScrollView, Pressable} from 'react-native';
+import {SafeAreaView, ScrollView, Text, View} from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Styles from '@styles';
 import Header from '@components/inc/Header';
