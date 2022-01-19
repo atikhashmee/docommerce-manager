@@ -18,7 +18,7 @@ class Header extends Component {
     };
     render() {
         return (
-            <Appbar.Header style={{backgroundColor: COLORS.white, elevation: 0}}>
+            <Appbar.Header style={{backgroundColor: COLORS.white}}>
                 <Appbar.Content title={this.props.title ? this.props.title : ''} style={Styles.headerContent} />
                 {this.props.showBack ? (
                     <Appbar.BackAction onPress={this.onPressBackButton} />

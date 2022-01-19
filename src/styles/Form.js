@@ -24,6 +24,7 @@ export default StyleSheet.create({
     },
     formLabel: {
         color: '#000',
+        fontWeight: 'bold',
         marginTop: 5,
     },
     formButtonBox: {
@@ -59,9 +60,13 @@ export default StyleSheet.create({
         paddingLeft: 10,
         height: 150,
     },
-
     listBorder: {
         borderBottomWidth: 1,
         borderBottomColor: '#ccc',
+    },
+    inputGroupStyle: {
+        borderColor: COLORS.primary,
+        paddingVertical: 8,
+        borderRadius: 4,
     },
 });
