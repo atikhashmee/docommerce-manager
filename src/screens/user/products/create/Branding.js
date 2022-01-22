@@ -10,6 +10,7 @@ import styled from 'styled-components/native';
 import {COLORS} from '@constants';
 import {Picker} from '@react-native-picker/picker';
 import TagInput from 'react-native-tags-input';
+import Button from '@components/form/buttons/Button';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Switch} from 'react-native-paper';
 
@@ -47,13 +48,70 @@ class Branding extends Component {
                 <AnimScrollView style={[Styles.topContainer]}>
                     <Styles.PageHeader>Branding</Styles.PageHeader>
                     <FormGroup>
-                        <FormGroup.Label style={Styles.formLabel}>Main Category</FormGroup.Label>
+                        <FormGroup.Label style={Styles.formLabel}>Origin</FormGroup.Label>
                         <PickerWrapper>
                             <Picker selectedValue={this.state.selectedLanguage} onValueChange={(itemValue, itemIndex) => this.setState({selectedLanguage: itemValue})}>
-                                <Picker.Item label="Main Category" value="" />
+                                <Picker.Item label="Select Origin" value="" />
                                 <Picker.Item label="Inactive" value="inactive" />
                             </Picker>
                         </PickerWrapper>
+                    </FormGroup>
+                    <FormGroup>
+                        <FormGroup.Label style={Styles.formLabel}>Brand</FormGroup.Label>
+                        <PickerWrapper>
+                            <Picker selectedValue={this.state.selectedLanguage} onValueChange={(itemValue, itemIndex) => this.setState({selectedLanguage: itemValue})}>
+                                <Picker.Item label="Select Brand" value="" />
+                                <Picker.Item label="Inactive" value="inactive" />
+                            </Picker>
+                        </PickerWrapper>
+                        <View style={styles.buttonContainer}>
+                            <View style={Styles.row}>
+                                <View style={Styles.col6}></View>
+                                <View style={Styles.col6}>
+                                    <Button onPress={this.onPressSubmit} style={styles.button} containerStyle={styles.buttonInner}>
+                                        <Button.Text style={styles.btnText}>Add New</Button.Text>
+                                    </Button>
+                                </View>
+                            </View>
+                        </View>
+                    </FormGroup>
+                    <FormGroup>
+                        <FormGroup.Label style={Styles.formLabel}>Manufacturer</FormGroup.Label>
+                        <PickerWrapper>
+                            <Picker selectedValue={this.state.selectedLanguage} onValueChange={(itemValue, itemIndex) => this.setState({selectedLanguage: itemValue})}>
+                                <Picker.Item label="Select Manufacturer" value="" />
+                                <Picker.Item label="Inactive" value="inactive" />
+                            </Picker>
+                        </PickerWrapper>
+                        <View style={styles.buttonContainer}>
+                            <View style={Styles.row}>
+                                <View style={Styles.col6}></View>
+                                <View style={Styles.col6}>
+                                    <Button onPress={this.onPressSubmit} style={styles.button} containerStyle={styles.buttonInner}>
+                                        <Button.Text style={styles.btnText}>Add New</Button.Text>
+                                    </Button>
+                                </View>
+                            </View>
+                        </View>
+                    </FormGroup>
+                    <FormGroup>
+                        <FormGroup.Label style={Styles.formLabel}>Supplier</FormGroup.Label>
+                        <PickerWrapper>
+                            <Picker selectedValue={this.state.selectedLanguage} onValueChange={(itemValue, itemIndex) => this.setState({selectedLanguage: itemValue})}>
+                                <Picker.Item label="Select Supplier" value="" />
+                                <Picker.Item label="Inactive" value="inactive" />
+                            </Picker>
+                        </PickerWrapper>
+                        <View style={styles.buttonContainer}>
+                            <View style={Styles.row}>
+                                <View style={Styles.col6}></View>
+                                <View style={Styles.col6}>
+                                    <Button onPress={this.onPressSubmit} style={styles.button} containerStyle={styles.buttonInner}>
+                                        <Button.Text style={styles.btnText}>Add New</Button.Text>
+                                    </Button>
+                                </View>
+                            </View>
+                        </View>
                     </FormGroup>
                 </AnimScrollView>
             </View>

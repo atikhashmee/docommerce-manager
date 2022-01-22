@@ -46,15 +46,89 @@ class Shipping extends Component {
                 <Spinner visible={spinner} textContent={'Loading...'} />
                 <AnimScrollView style={[Styles.topContainer]}>
                     <Styles.PageHeader>Shipping</Styles.PageHeader>
+                    <View style={Styles.row}>
+                        <View style={Styles.col6}>
+                            <FormGroup>
+                                <FormGroup.Label style={Styles.formLabel}>Weight</FormGroup.Label>
+                                <FormGroup.InputGroup style={Styles.inputGroupStyle}>
+                                    <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                </FormGroup.InputGroup>
+                            </FormGroup>
+                        </View>
+                        <View style={Styles.col6}>
+                            <FormGroup>
+                                <FormGroup.Label style={Styles.formLabel}>Package Length</FormGroup.Label>
+                                <FormGroup.InputGroup style={Styles.inputGroupStyle}>
+                                    <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                </FormGroup.InputGroup>
+                            </FormGroup>
+                        </View>
+                        <View style={Styles.col6}>
+                            <FormGroup>
+                                <FormGroup.Label style={Styles.formLabel}>Package Width</FormGroup.Label>
+                                <FormGroup.InputGroup style={Styles.inputGroupStyle}>
+                                    <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                </FormGroup.InputGroup>
+                            </FormGroup>
+                        </View>
+                        <View style={Styles.col6}>
+                            <FormGroup>
+                                <FormGroup.Label style={Styles.formLabel}>Package Height</FormGroup.Label>
+                                <FormGroup.InputGroup style={Styles.inputGroupStyle}>
+                                    <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                </FormGroup.InputGroup>
+                            </FormGroup>
+                        </View>
+                    </View>
                     <FormGroup>
-                        <FormGroup.Label style={Styles.formLabel}>Main Category</FormGroup.Label>
-                        <PickerWrapper>
-                            <Picker selectedValue={this.state.selectedLanguage} onValueChange={(itemValue, itemIndex) => this.setState({selectedLanguage: itemValue})}>
-                                <Picker.Item label="Main Category" value="" />
-                                <Picker.Item label="Inactive" value="inactive" />
-                            </Picker>
-                        </PickerWrapper>
+                        <FormGroup.Label style={Styles.formLabel}>Show on New Arrival Collection</FormGroup.Label>
+                        <Switch value={this.state.isSwitchOn} onValueChange={this.onToggleSwitch} />
                     </FormGroup>
+                    <View style={Styles.row}>
+                        <View style={Styles.col6}>
+                            <FormGroup>
+                                <FormGroup.Label style={Styles.formLabel}>Min Order Q.</FormGroup.Label>
+                                <FormGroup.InputGroup style={Styles.inputGroupStyle}>
+                                    <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                </FormGroup.InputGroup>
+                            </FormGroup>
+                        </View>
+                        <View style={Styles.col6}>
+                            <FormGroup>
+                                <FormGroup.Label style={Styles.formLabel}>Max Order Q.</FormGroup.Label>
+                                <FormGroup.InputGroup style={Styles.inputGroupStyle}>
+                                    <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                </FormGroup.InputGroup>
+                            </FormGroup>
+                        </View>
+                        <View style={Styles.col6}>
+                            <FormGroup>
+                                <FormGroup.Label style={Styles.formLabel}>Delivery Quantity.</FormGroup.Label>
+                                <FormGroup.InputGroup style={Styles.inputGroupStyle}>
+                                    <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                </FormGroup.InputGroup>
+                            </FormGroup>
+                        </View>
+                    </View>
+                    <Styles.PageHeader>Additional Shipping Charge</Styles.PageHeader>
+                    <View style={Styles.row}>
+                        <View style={Styles.col12}>
+                            <FormGroup>
+                                <FormGroup.Label style={Styles.formLabel}>Inside Dhaka</FormGroup.Label>
+                                <FormGroup.InputGroup style={Styles.inputGroupStyle}>
+                                    <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                </FormGroup.InputGroup>
+                            </FormGroup>
+                        </View>
+                        <View style={Styles.col12}>
+                            <FormGroup>
+                                <FormGroup.Label style={Styles.formLabel}>Outside Dhaka</FormGroup.Label>
+                                <FormGroup.InputGroup style={Styles.inputGroupStyle}>
+                                    <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                </FormGroup.InputGroup>
+                            </FormGroup>
+                        </View>
+                    </View>
                 </AnimScrollView>
             </View>
         );
