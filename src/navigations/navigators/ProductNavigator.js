@@ -4,6 +4,15 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {COLORS} from '@constants';
 import ProductInfo from '@screens/user/products/create/ProductInfo';
 import CategoryCollection from '@screens/user/products/create/CategoryCollection';
+import Media from '@screens/user/products/create/Media';
+import PricingInventory from '@screens/user/products/create/PricingInventory';
+import PricingInventoryStepOne from '@screens/user/products/create/PricingInventoryStepOne';
+import PricingInventoryStepTwo from '@screens/user/products/create/PricingInventoryStepTwo';
+import PricingInventoryStepThree from '@screens/user/products/create/PricingInventoryStepThree';
+import ProductSettings from '@screens/user/products/create/ProductSettings';
+import Branding from '@screens/user/products/create/Branding';
+import Shipping from '@screens/user/products/create/Shipping';
+import Seo from '@screens/user/products/create/Seo';
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -80,8 +89,7 @@ const MyTabBar = ({state, descriptors, navigation}) => {
                                 accessibilityLabel={options.tabBarAccessibilityLabel}
                                 testID={options.tabBarTestID}
                                 onPress={onPress}
-                                onLongPress={onLongPress}
-                                style={{padding: 3, margin: 2}}>
+                                onLongPress={onLongPress}>
                                 <Icon name={isFocused ? 'circle' : 'circle-outline'} color={COLORS.primary} size={20} />
                             </TouchableOpacity>
                         );
@@ -113,11 +121,23 @@ const ProductTabNavigator = () => {
 
             <Tab.Screen name="UpdateProfile" component={CategoryCollection} />
 
-            <Tab.Screen name="UpdateProfile1" component={CategoryCollection} />
+            <Tab.Screen name="Media" component={Media} />
 
-            <Tab.Screen name="UpdateProfile2" component={CategoryCollection} />
+            <Tab.Screen name="PricingInventory" component={PricingInventory} />
 
-            <Tab.Screen name="UpdateProfile3" component={CategoryCollection} />
+            <Tab.Screen name="PricingInventoryStepOne" component={PricingInventoryStepOne} />
+
+            <Tab.Screen name="PricingInventoryStepTwo" component={PricingInventoryStepTwo} />
+
+            <Tab.Screen name="PricingInventoryStepThree" component={PricingInventoryStepThree} />
+
+            <Tab.Screen name="ProductSettings" component={ProductSettings} />
+
+            <Tab.Screen name="Branding" component={Branding} />
+
+            <Tab.Screen name="Shipping" component={Shipping} />
+
+            <Tab.Screen name="Seo" component={Seo} />
         </Tab.Navigator>
     );
 };
