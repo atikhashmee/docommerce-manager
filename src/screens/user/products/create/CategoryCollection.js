@@ -1,18 +1,42 @@
 import React, {Component} from 'react';
-import {Text, View} from 'react-native';
+import {Text, View, StyleSheet, Dimensions} from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Animated from 'react-native-reanimated';
 import {connect} from 'react-redux';
+import FormGroup from '@components/form/FormGroup';
 import Styles from '@styles';
 import Header from './Header';
+import styled from 'styled-components/native';
+import {COLORS} from '@constants';
+import {Picker} from '@react-native-picker/picker';
+import TagInput from 'react-native-tags-input';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {Switch} from 'react-native-paper';
+
+const mainColor = '#3ca897';
 
 class CategoryCollection extends Component {
     constructor(props) {
         super(props);
         this.state = {
             spinner: false,
+            emails: '',
+            text: '',
+            tags: {
+                tag: '',
+                tagsArray: [],
+            },
+            isSwitchOn: false,
         };
     }
+
+    updateTagState = (state) => {
+        this.setState({
+            tags: state,
+        });
+    };
+
+    onToggleSwitch = () => this.setState({isSwitchOn: !this.state.isSwitchOn});
 
     render() {
         const {spinner} = this.state;
@@ -20,9 +44,58 @@ class CategoryCollection extends Component {
             <View style={Styles.container}>
                 <Header navigation={this.props.navigation} title="Add New Product" showBack={true} />
                 <Spinner visible={spinner} textContent={'Loading...'} />
-                <Animated.ScrollView style={[Styles.topContainer]}>
-                    <Text>Category & Collection</Text>
-                </Animated.ScrollView>
+                <AnimScrollView style={[Styles.topContainer]}>
+                    <Styles.PageHeader>Category & Collection</Styles.PageHeader>
+                    <FormGroup>
+                        <FormGroup.Label style={Styles.formLabel}>Main Category</FormGroup.Label>
+                        <PickerWrapper>
+                            <Picker selectedValue={this.state.selectedLanguage} onValueChange={(itemValue, itemIndex) => this.setState({selectedLanguage: itemValue})}>
+                                <Picker.Item label="Main Category" value="" />
+                                <Picker.Item label="Inactive" value="inactive" />
+                            </Picker>
+                        </PickerWrapper>
+                    </FormGroup>
+                    <FormGroup>
+                        <FormGroup.Label style={Styles.formLabel}>Categories</FormGroup.Label>
+                        <PickerWrapper>
+                            <Picker selectedValue={this.state.selectedLanguage} onValueChange={(itemValue, itemIndex) => this.setState({selectedLanguage: itemValue})}>
+                                <Picker.Item label="Categories" value="" />
+                                <Picker.Item label="Inactive" value="inactive" />
+                            </Picker>
+                        </PickerWrapper>
+                    </FormGroup>
+                    <FormGroup>
+                        <FormGroup.Label style={Styles.formLabel}>Tags</FormGroup.Label>
+                        <PickerWrapper>
+                            <PTagInput
+                                updateState={this.updateTagState}
+                                tags={this.state.tags}
+                                placeholder="Tags..."
+                                label="Press comma & space to add a tag"
+                                labelStyle={{color: '#fff'}}
+                                leftElement={<Icon name={'tag-multiple'} type={'material-community'} color={this.state.tagsText} />}
+                                leftElementContainerStyle={{marginLeft: 3}}
+                                containerStyle={{width: Dimensions.get('window').width - 40}}
+                                inputContainerStyle={[styles.textInput, {backgroundColor: this.state.tagsColor}]}
+                                inputStyle={{color: this.state.tagsText}}
+                                onFocus={() => this.setState({tagsColor: '#fff', tagsText: mainColor})}
+                                onBlur={() => this.setState({tagsColor: mainColor, tagsText: '#fff'})}
+                                autoCorrect={false}
+                                tagStyle={styles.tag}
+                                tagTextStyle={styles.tagText}
+                                keysForTag={', '}
+                            />
+                        </PickerWrapper>
+                    </FormGroup>
+                    <FormGroup>
+                        <FormGroup.Label style={Styles.formLabel}>Show on Featured Collection</FormGroup.Label>
+                        <Switch value={this.state.isSwitchOn} onValueChange={this.onToggleSwitch} />
+                    </FormGroup>
+                    <FormGroup>
+                        <FormGroup.Label style={Styles.formLabel}>Show on New Arrival Collection</FormGroup.Label>
+                        <Switch value={this.state.isSwitchOn} onValueChange={this.onToggleSwitch} />
+                    </FormGroup>
+                </AnimScrollView>
             </View>
         );
     }
@@ -36,3 +109,43 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps)(CategoryCollection);
+
+const AnimScrollView = styled(Animated.ScrollView)`
+    flex: 1;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    background-color: ${COLORS.background};
+`;
+
+const PickerWrapper = styled.View`
+    border: 1px solid ${COLORS.primary};
+    background-color: ${COLORS.white};
+`;
+
+const PTagInput = styled(TagInput)`
+    border: 1px solid red;
+`;
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: mainColor,
+    },
+    textInput: {
+        height: 40,
+        borderColor: 'white',
+        borderWidth: 1,
+        marginTop: 8,
+        borderRadius: 5,
+        padding: 3,
+    },
+    tag: {
+        backgroundColor: '#fff',
+    },
+    tagText: {
+        color: mainColor,
+    },
+});

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Animated from 'react-native-reanimated';
 import FormGroup from '@components/form/FormGroup';
@@ -8,12 +8,21 @@ import Styles from '@styles';
 import Header from './Header';
 import styled from 'styled-components/native';
 import {COLORS} from '@constants';
+import {Picker} from '@react-native-picker/picker';
+
+const Style = StyleSheet.create({
+    textAreaStyle: {
+        paddingVertical: 0,
+        textAlignVertical: 'top',
+    },
+});
 
 class ProductInfo extends Component {
     constructor(props) {
         super(props);
         this.state = {
             spinner: false,
+            selectedLanguage: '',
         };
     }
 
@@ -40,20 +49,23 @@ class ProductInfo extends Component {
                     <FormGroup>
                         <FormGroup.Label style={Styles.formLabel}>Product Short Description</FormGroup.Label>
                         <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                            <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                            <FormGroup.TextInput style={Style.textAreaStyle} onChangeText={(val) => this.setState({mobile: val})} multiline numberOfLines={4} editable />
                         </FormGroup.InputGroup>
                     </FormGroup>
                     <FormGroup>
                         <FormGroup.Label style={Styles.formLabel}>Product Description</FormGroup.Label>
                         <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                            <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                            <FormGroup.TextInput style={Style.textAreaStyle} onChangeText={(val) => this.setState({mobile: val})} multiline numberOfLines={6} editable />
                         </FormGroup.InputGroup>
                     </FormGroup>
                     <FormGroup>
                         <FormGroup.Label style={Styles.formLabel}>Status</FormGroup.Label>
-                        <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                            <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
-                        </FormGroup.InputGroup>
+                        <PickerWrapper>
+                            <Picker selectedValue={this.state.selectedLanguage} onValueChange={(itemValue, itemIndex) => this.setState({selectedLanguage: itemValue})}>
+                                <Picker.Item label="Active" value="active" />
+                                <Picker.Item label="Inactive" value="inactive" />
+                            </Picker>
+                        </PickerWrapper>
                     </FormGroup>
                 </AnimScrollView>
             </View>
@@ -76,4 +88,9 @@ const AnimScrollView = styled(Animated.ScrollView)`
     padding-right: 10px;
     padding-top: 10px;
     background-color: ${COLORS.background};
+`;
+
+const PickerWrapper = styled.View`
+    border: 1px solid ${COLORS.primary};
+    background-color: ${COLORS.white};
 `;

@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#CCCCCC',
         padding: 10,
+        backgroundColor: '#fff',
     },
     labelText: {
         color: COLORS.black,
