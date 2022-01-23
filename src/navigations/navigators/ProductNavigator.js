@@ -6,8 +6,6 @@ import ProductInfo from '@screens/user/products/create/ProductInfo';
 import CategoryCollection from '@screens/user/products/create/CategoryCollection';
 import Media from '@screens/user/products/create/Media';
 import PricingInventory from '@screens/user/products/create/PricingInventory';
-import PricingInventoryStepOne from '@screens/user/products/create/PricingInventoryStepOne';
-import PricingInventoryStepTwo from '@screens/user/products/create/PricingInventoryStepTwo';
 import PricingInventoryStepThree from '@screens/user/products/create/PricingInventoryStepThree';
 import ProductSettings from '@screens/user/products/create/ProductSettings';
 import Branding from '@screens/user/products/create/Branding';
@@ -124,10 +122,6 @@ const ProductTabNavigator = () => {
             <Tab.Screen name="Media" component={Media} />
 
             <Tab.Screen name="PricingInventory" component={PricingInventory} />
-
-            <Tab.Screen name="PricingInventoryStepOne" component={PricingInventoryStepOne} />
-
-            <Tab.Screen name="PricingInventoryStepTwo" component={PricingInventoryStepTwo} />
 
             <Tab.Screen name="PricingInventoryStepThree" component={PricingInventoryStepThree} />
 

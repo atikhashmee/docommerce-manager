@@ -20,24 +20,9 @@ class PricingInventoryStepThree extends Component {
         super(props);
         this.state = {
             spinner: false,
-            emails: '',
-            text: '',
-            tags: {
-                tag: '',
-                tagsArray: [],
-            },
             isSwitchOn: false,
         };
     }
-
-    updateTagState = (state) => {
-        this.setState({
-            tags: state,
-        });
-    };
-
-    onToggleSwitch = () => this.setState({isSwitchOn: !this.state.isSwitchOn});
-
     render() {
         const {spinner} = this.state;
         return (
@@ -45,16 +30,153 @@ class PricingInventoryStepThree extends Component {
                 <Header navigation={this.props.navigation} title="Add New Product" showBack={true} />
                 <Spinner visible={spinner} textContent={'Loading...'} />
                 <AnimScrollView style={[Styles.topContainer]}>
-                    <Styles.PageHeader>Pricing & Inventory -- 3</Styles.PageHeader>
-                    <FormGroup>
-                        <FormGroup.Label style={Styles.formLabel}>Main Category</FormGroup.Label>
-                        <PickerWrapper>
-                            <Picker selectedValue={this.state.selectedLanguage} onValueChange={(itemValue, itemIndex) => this.setState({selectedLanguage: itemValue})}>
-                                <Picker.Item label="Main Category" value="" />
-                                <Picker.Item label="Inactive" value="inactive" />
-                            </Picker>
-                        </PickerWrapper>
-                    </FormGroup>
+                    <Styles.PageHeader>Variant Pricing -- 3</Styles.PageHeader>
+                    <VariantPricingWrapper>
+                        <VariantHeading>XL</VariantHeading>
+                        <BlockName>Price</BlockName>
+                        <View style={Styles.row}>
+                            <View style={Styles.col6}>
+                                <FormGroup style={styles.formGroupStyle}>
+                                    <FormGroup.Label style={Styles.formLabel}>Previous Price</FormGroup.Label>
+                                    <FormGroup.InputGroup style={Styles.inputGroupStyle}>
+                                        <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                    </FormGroup.InputGroup>
+                                </FormGroup>
+                            </View>
+                            <View style={Styles.col6}>
+                                <FormGroup style={styles.formGroupStyle}>
+                                    <FormGroup.Label style={Styles.formLabel}>Selling Price</FormGroup.Label>
+                                    <FormGroup.InputGroup style={Styles.inputGroupStyle}>
+                                        <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                    </FormGroup.InputGroup>
+                                </FormGroup>
+                            </View>
+                            <View style={Styles.col6}>
+                                <FormGroup style={styles.formGroupStyle}>
+                                    <FormGroup.Label style={Styles.formLabel}>Product Cost</FormGroup.Label>
+                                    <FormGroup.InputGroup style={Styles.inputGroupStyle}>
+                                        <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                    </FormGroup.InputGroup>
+                                </FormGroup>
+                            </View>
+                            <View style={Styles.col6}>
+                                <FormGroup style={styles.formGroupStyle}>
+                                    <FormGroup.Label style={Styles.formLabel}>Profit Amount</FormGroup.Label>
+                                    <FormGroup.InputGroup style={Styles.inputGroupStyle}>
+                                        <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                    </FormGroup.InputGroup>
+                                </FormGroup>
+                            </View>
+                        </View>
+                        <BlockName>Inventory</BlockName>
+                        <View style={Styles.row}>
+                            <View style={Styles.col6}>
+                                <FormGroup style={styles.formGroupStyle}>
+                                    <FormGroup.Label style={Styles.formLabel}>Initial Stock Quantity</FormGroup.Label>
+                                    <FormGroup.InputGroup style={Styles.inputGroupStyle}>
+                                        <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                    </FormGroup.InputGroup>
+                                </FormGroup>
+                            </View>
+                            <View style={Styles.col6}>
+                                <FormGroup style={styles.formGroupStyle}>
+                                    <FormGroup.Label style={Styles.formLabel}>SKU</FormGroup.Label>
+                                    <FormGroup.InputGroup style={Styles.inputGroupStyle}>
+                                        <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                    </FormGroup.InputGroup>
+                                </FormGroup>
+                            </View>
+                            <View style={Styles.col6}>
+                                <FormGroup style={styles.formGroupStyle}>
+                                    <FormGroup.Label style={Styles.formLabel}>Warehouse</FormGroup.Label>
+                                    <FormGroup.InputGroup style={Styles.inputGroupStyle}>
+                                        <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                    </FormGroup.InputGroup>
+                                </FormGroup>
+                            </View>
+                            <View style={Styles.col6}>
+                                <FormGroup style={styles.formGroupStyle}>
+                                    <FormGroup.Label style={Styles.formLabel}>Barcode</FormGroup.Label>
+                                    <FormGroup.InputGroup style={Styles.inputGroupStyle}>
+                                        <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                    </FormGroup.InputGroup>
+                                </FormGroup>
+                            </View>
+                        </View>
+                    </VariantPricingWrapper>
+                    <VariantPricingWrapper>
+                        <VariantHeading>SM</VariantHeading>
+                        <BlockName>Price</BlockName>
+                        <View style={Styles.row}>
+                            <View style={Styles.col6}>
+                                <FormGroup style={styles.formGroupStyle}>
+                                    <FormGroup.Label style={Styles.formLabel}>Previous Price</FormGroup.Label>
+                                    <FormGroup.InputGroup style={Styles.inputGroupStyle}>
+                                        <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                    </FormGroup.InputGroup>
+                                </FormGroup>
+                            </View>
+                            <View style={Styles.col6}>
+                                <FormGroup style={styles.formGroupStyle}>
+                                    <FormGroup.Label style={Styles.formLabel}>Selling Price</FormGroup.Label>
+                                    <FormGroup.InputGroup style={Styles.inputGroupStyle}>
+                                        <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                    </FormGroup.InputGroup>
+                                </FormGroup>
+                            </View>
+                            <View style={Styles.col6}>
+                                <FormGroup style={styles.formGroupStyle}>
+                                    <FormGroup.Label style={Styles.formLabel}>Product Cost</FormGroup.Label>
+                                    <FormGroup.InputGroup style={Styles.inputGroupStyle}>
+                                        <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                    </FormGroup.InputGroup>
+                                </FormGroup>
+                            </View>
+                            <View style={Styles.col6}>
+                                <FormGroup style={styles.formGroupStyle}>
+                                    <FormGroup.Label style={Styles.formLabel}>Profit Amount</FormGroup.Label>
+                                    <FormGroup.InputGroup style={Styles.inputGroupStyle}>
+                                        <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                    </FormGroup.InputGroup>
+                                </FormGroup>
+                            </View>
+                        </View>
+                        <BlockName>Inventory</BlockName>
+                        <View style={Styles.row}>
+                            <View style={Styles.col6}>
+                                <FormGroup style={styles.formGroupStyle}>
+                                    <FormGroup.Label style={Styles.formLabel}>Initial Stock Quantity</FormGroup.Label>
+                                    <FormGroup.InputGroup style={Styles.inputGroupStyle}>
+                                        <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                    </FormGroup.InputGroup>
+                                </FormGroup>
+                            </View>
+                            <View style={Styles.col6}>
+                                <FormGroup style={styles.formGroupStyle}>
+                                    <FormGroup.Label style={Styles.formLabel}>SKU</FormGroup.Label>
+                                    <FormGroup.InputGroup style={Styles.inputGroupStyle}>
+                                        <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                    </FormGroup.InputGroup>
+                                </FormGroup>
+                            </View>
+                            <View style={Styles.col6}>
+                                <FormGroup style={styles.formGroupStyle}>
+                                    <FormGroup.Label style={Styles.formLabel}>Warehouse</FormGroup.Label>
+                                    <FormGroup.InputGroup style={Styles.inputGroupStyle}>
+                                        <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                    </FormGroup.InputGroup>
+                                </FormGroup>
+                            </View>
+                            <View style={Styles.col6}>
+                                <FormGroup style={styles.formGroupStyle}>
+                                    <FormGroup.Label style={Styles.formLabel}>Barcode</FormGroup.Label>
+                                    <FormGroup.InputGroup style={Styles.inputGroupStyle}>
+                                        <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                    </FormGroup.InputGroup>
+                                </FormGroup>
+                            </View>
+                        </View>
+                    </VariantPricingWrapper>
                 </AnimScrollView>
             </View>
         );
@@ -78,34 +200,31 @@ const AnimScrollView = styled(Animated.ScrollView)`
     background-color: ${COLORS.background};
 `;
 
-const PickerWrapper = styled.View`
-    border: 1px solid ${COLORS.primary};
+const VariantHeading = styled.Text`
+    height: 30px;
+    border-left-width: 2px;
+    border-left-color: ${COLORS.primary};
     background-color: ${COLORS.white};
+    text-align: center;
+    text-align-vertical: center;
 `;
 
-const PTagInput = styled(TagInput)`
-    border: 1px solid red;
+const VariantPricingWrapper = styled.View`
+    border: 1px solid ${COLORS.background};
+    margin-top: 3px;
+    margin-bottom: 3px;
+`;
+
+const BlockName = styled.Text`
+    color: ${COLORS.black};
+    margin-top: 3px;
+    margin-bottom: 3px;
+    padding-left: 3px;
 `;
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: mainColor,
-    },
-    textInput: {
-        height: 40,
-        borderColor: 'white',
-        borderWidth: 1,
-        marginTop: 8,
-        borderRadius: 5,
-        padding: 3,
-    },
-    tag: {
-        backgroundColor: '#fff',
-    },
-    tagText: {
-        color: mainColor,
+    formGroupStyle: {
+        width: '95%',
+        paddingVertical: 0,
     },
 });
