@@ -26,6 +26,12 @@ const globe = <FeatherIcon name="globe" size={30} color={'#81368f'} />;
 const money = <FontAwesomeIcon name="money" size={30} color={'#81368f'} />;
 const plus = <FontAwesomeIcon name="plus" size={15} color={'#fff'} />;
 
+const IconAvater = (name, size, color, type) => {
+    if (type === 'fa') {
+        return <FontAwesomeIcon name={name} size={size} color={color} />;
+    }
+};
+
 export default {
     logo,
     logo_white,
@@ -42,4 +48,5 @@ export default {
     globe,
     money,
     plus,
+    IconAvater,
 };

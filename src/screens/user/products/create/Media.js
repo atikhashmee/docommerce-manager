@@ -6,8 +6,8 @@ import {connect} from 'react-redux';
 import FormGroup from '@components/form/FormGroup';
 import Styles from '@styles';
 import Header from './Header';
-import styled from 'styled-components/native';
-import {COLORS} from '@constants';
+import styled, {css} from 'styled-components/native';
+import {COLORS, icons} from '@constants';
 import {Picker} from '@react-native-picker/picker';
 import TagInput from 'react-native-tags-input';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -20,23 +20,8 @@ class Media extends Component {
         super(props);
         this.state = {
             spinner: false,
-            emails: '',
-            text: '',
-            tags: {
-                tag: '',
-                tagsArray: [],
-            },
-            isSwitchOn: false,
         };
     }
-
-    updateTagState = (state) => {
-        this.setState({
-            tags: state,
-        });
-    };
-
-    onToggleSwitch = () => this.setState({isSwitchOn: !this.state.isSwitchOn});
 
     render() {
         const {spinner} = this.state;
@@ -46,15 +31,28 @@ class Media extends Component {
                 <Spinner visible={spinner} textContent={'Loading...'} />
                 <AnimScrollView style={[Styles.topContainer]}>
                     <Styles.PageHeader>Media</Styles.PageHeader>
-                    <FormGroup>
-                        <FormGroup.Label style={Styles.formLabel}>Main Category</FormGroup.Label>
-                        <PickerWrapper>
-                            <Picker selectedValue={this.state.selectedLanguage} onValueChange={(itemValue, itemIndex) => this.setState({selectedLanguage: itemValue})}>
-                                <Picker.Item label="Main Category" value="" />
-                                <Picker.Item label="Inactive" value="inactive" />
-                            </Picker>
-                        </PickerWrapper>
-                    </FormGroup>
+                    <MediaWrapper>
+                        <ThumbNailBox style={styles.borderStyleBos}>
+                            <Text>{icons.IconAvater('plus', 25, `${COLORS.primary}`, 'fa')}</Text>
+                            <Text>Add Thumbnail</Text>
+                        </ThumbNailBox>
+                        <ImagesBox style={styles.borderStyleBos}>
+                            <Text>{icons.IconAvater('plus', 25, `${COLORS.primary}`, 'fa')}</Text>
+                            <Text>Images</Text>
+                        </ImagesBox>
+                    </MediaWrapper>
+                    <ImagesWrapper>
+                        {Array(22)
+                            .fill(0)
+                            .map((item, k) => {
+                                return (
+                                    <ImageBox key={k}>
+                                        <Text>Image 1</Text>
+                                        <CrossButton>{icons.IconAvater('times', 15, `${COLORS.primary}`, 'fa')}</CrossButton>
+                                    </ImageBox>
+                                );
+                            })}
+                    </ImagesWrapper>
                 </AnimScrollView>
             </View>
         );
@@ -78,34 +76,55 @@ const AnimScrollView = styled(Animated.ScrollView)`
     background-color: ${COLORS.background};
 `;
 
-const PickerWrapper = styled.View`
-    border: 1px solid ${COLORS.primary};
+const MediaWrapper = styled.View`
+    width: 100%;
+    flex: 1;
+    flex-direction: row;
+    margin-bottom: 10px;
+`;
+
+const boxStyle = css`
+    justify-content: center;
+    align-items: center;
+    min-height: 20px;
+    height: 130px;
     background-color: ${COLORS.white};
 `;
 
-const PTagInput = styled(TagInput)`
-    border: 1px solid red;
+const ThumbNailBox = styled.View`
+    ${boxStyle};
+    flex-basis: 40%;
+`;
+const ImagesBox = styled.View`
+    ${boxStyle};
+    flex-basis: 60%;
+`;
+const ImagesWrapper = styled.View`
+    flex: 1;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+`;
+
+const ImageBox = styled.View`
+    flex-basis: 30%;
+    border: 1px solid ${COLORS.gray};
+    height: 50px;
+    margin-bottom: 15px;
+    position: relative;
+`;
+
+const CrossButton = styled.View`
+    position: absolute;
+    right: -6px;
+    top: -6px;
 `;
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: mainColor,
-    },
-    textInput: {
-        height: 40,
-        borderColor: 'white',
+    borderStyleBos: {
+        borderStyle: 'dashed',
+        borderRadius: 1,
         borderWidth: 1,
-        marginTop: 8,
-        borderRadius: 5,
-        padding: 3,
-    },
-    tag: {
-        backgroundColor: '#fff',
-    },
-    tagText: {
-        color: mainColor,
+        borderColor: COLORS.primary,
     },
 });
