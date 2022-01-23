@@ -24,6 +24,7 @@ const align_left = <FeatherIcon name="align-left" size={25} color={'#81368f'} />
 const users = <FeatherIcon name="users" size={30} color={'#81368f'} />;
 const globe = <FeatherIcon name="globe" size={30} color={'#81368f'} />;
 const money = <FontAwesomeIcon name="money" size={30} color={'#81368f'} />;
+const plus = <FontAwesomeIcon name="plus" size={15} color={'#fff'} />;
 
 export default {
     logo,
@@ -40,4 +41,5 @@ export default {
     users,
     globe,
     money,
+    plus,
 };

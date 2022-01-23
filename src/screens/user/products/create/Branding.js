@@ -7,35 +7,18 @@ import FormGroup from '@components/form/FormGroup';
 import Styles from '@styles';
 import Header from './Header';
 import styled from 'styled-components/native';
-import {COLORS} from '@constants';
+import {COLORS, icons} from '@constants';
 import {Picker} from '@react-native-picker/picker';
-import TagInput from 'react-native-tags-input';
 import Button from '@components/form/buttons/Button';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {Switch} from 'react-native-paper';
-
-const mainColor = '#3ca897';
 
 class Branding extends Component {
     constructor(props) {
         super(props);
         this.state = {
             spinner: false,
-            emails: '',
-            text: '',
-            tags: {
-                tag: '',
-                tagsArray: [],
-            },
             isSwitchOn: false,
         };
     }
-
-    updateTagState = (state) => {
-        this.setState({
-            tags: state,
-        });
-    };
 
     onToggleSwitch = () => this.setState({isSwitchOn: !this.state.isSwitchOn});
 
@@ -47,7 +30,7 @@ class Branding extends Component {
                 <Spinner visible={spinner} textContent={'Loading...'} />
                 <AnimScrollView style={[Styles.topContainer]}>
                     <Styles.PageHeader>Branding</Styles.PageHeader>
-                    <FormGroup>
+                    <FormGroup style={styles.FormGroupStyle}>
                         <FormGroup.Label style={Styles.formLabel}>Origin</FormGroup.Label>
                         <PickerWrapper>
                             <Picker selectedValue={this.state.selectedLanguage} onValueChange={(itemValue, itemIndex) => this.setState({selectedLanguage: itemValue})}>
@@ -56,7 +39,7 @@ class Branding extends Component {
                             </Picker>
                         </PickerWrapper>
                     </FormGroup>
-                    <FormGroup>
+                    <FormGroup style={styles.FormGroupStyle}>
                         <FormGroup.Label style={Styles.formLabel}>Brand</FormGroup.Label>
                         <PickerWrapper>
                             <Picker selectedValue={this.state.selectedLanguage} onValueChange={(itemValue, itemIndex) => this.setState({selectedLanguage: itemValue})}>
@@ -66,16 +49,16 @@ class Branding extends Component {
                         </PickerWrapper>
                         <View style={styles.buttonContainer}>
                             <View style={Styles.row}>
-                                <View style={Styles.col6}></View>
-                                <View style={Styles.col6}>
+                                <View style={Styles.col8} />
+                                <View style={Styles.col4}>
                                     <Button onPress={this.onPressSubmit} style={styles.button} containerStyle={styles.buttonInner}>
-                                        <Button.Text style={styles.btnText}>Add New</Button.Text>
+                                        <Button.Text style={styles.btnText}>Add New {icons.plus}</Button.Text>
                                     </Button>
                                 </View>
                             </View>
                         </View>
                     </FormGroup>
-                    <FormGroup>
+                    <FormGroup style={styles.FormGroupStyle}>
                         <FormGroup.Label style={Styles.formLabel}>Manufacturer</FormGroup.Label>
                         <PickerWrapper>
                             <Picker selectedValue={this.state.selectedLanguage} onValueChange={(itemValue, itemIndex) => this.setState({selectedLanguage: itemValue})}>
@@ -85,16 +68,16 @@ class Branding extends Component {
                         </PickerWrapper>
                         <View style={styles.buttonContainer}>
                             <View style={Styles.row}>
-                                <View style={Styles.col6}></View>
-                                <View style={Styles.col6}>
+                                <View style={Styles.col8} />
+                                <View style={Styles.col4}>
                                     <Button onPress={this.onPressSubmit} style={styles.button} containerStyle={styles.buttonInner}>
-                                        <Button.Text style={styles.btnText}>Add New</Button.Text>
+                                        <Button.Text style={styles.btnText}>Add New {icons.plus}</Button.Text>
                                     </Button>
                                 </View>
                             </View>
                         </View>
                     </FormGroup>
-                    <FormGroup>
+                    <FormGroup style={styles.FormGroupStyle}>
                         <FormGroup.Label style={Styles.formLabel}>Supplier</FormGroup.Label>
                         <PickerWrapper>
                             <Picker selectedValue={this.state.selectedLanguage} onValueChange={(itemValue, itemIndex) => this.setState({selectedLanguage: itemValue})}>
@@ -104,10 +87,10 @@ class Branding extends Component {
                         </PickerWrapper>
                         <View style={styles.buttonContainer}>
                             <View style={Styles.row}>
-                                <View style={Styles.col6}></View>
-                                <View style={Styles.col6}>
+                                <View style={Styles.col8} />
+                                <View style={Styles.col4}>
                                     <Button onPress={this.onPressSubmit} style={styles.button} containerStyle={styles.buttonInner}>
-                                        <Button.Text style={styles.btnText}>Add New</Button.Text>
+                                        <Button.Text style={styles.btnText}>Add New {icons.plus}</Button.Text>
                                     </Button>
                                 </View>
                             </View>
@@ -139,31 +122,20 @@ const AnimScrollView = styled(Animated.ScrollView)`
 const PickerWrapper = styled.View`
     border: 1px solid ${COLORS.primary};
     background-color: ${COLORS.white};
-`;
-
-const PTagInput = styled(TagInput)`
-    border: 1px solid red;
+    margin-bottom: 5px;
 `;
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: mainColor,
+    buttonInner: {
+        borderRadius: 4,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
     },
-    textInput: {
-        height: 40,
-        borderColor: 'white',
-        borderWidth: 1,
-        marginTop: 8,
-        borderRadius: 5,
-        padding: 3,
+    btnText: {
+        textTransform: 'capitalize',
+        fontFamily: 'Montserrat-Bold',
     },
-    tag: {
-        backgroundColor: '#fff',
-    },
-    tagText: {
-        color: mainColor,
+    FormGroupStyle: {
+        paddingVertical: 0,
     },
 });

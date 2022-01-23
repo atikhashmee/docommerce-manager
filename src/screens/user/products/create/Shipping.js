@@ -20,21 +20,9 @@ class Shipping extends Component {
         super(props);
         this.state = {
             spinner: false,
-            emails: '',
-            text: '',
-            tags: {
-                tag: '',
-                tagsArray: [],
-            },
             isSwitchOn: false,
         };
     }
-
-    updateTagState = (state) => {
-        this.setState({
-            tags: state,
-        });
-    };
 
     onToggleSwitch = () => this.setState({isSwitchOn: !this.state.isSwitchOn});
 
@@ -48,7 +36,7 @@ class Shipping extends Component {
                     <Styles.PageHeader>Shipping</Styles.PageHeader>
                     <View style={Styles.row}>
                         <View style={Styles.col6}>
-                            <FormGroup>
+                            <FormGroup style={styles.formGroupStyle}>
                                 <FormGroup.Label style={Styles.formLabel}>Weight</FormGroup.Label>
                                 <FormGroup.InputGroup style={Styles.inputGroupStyle}>
                                     <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
@@ -56,7 +44,7 @@ class Shipping extends Component {
                             </FormGroup>
                         </View>
                         <View style={Styles.col6}>
-                            <FormGroup>
+                            <FormGroup style={styles.formGroupStyle}>
                                 <FormGroup.Label style={Styles.formLabel}>Package Length</FormGroup.Label>
                                 <FormGroup.InputGroup style={Styles.inputGroupStyle}>
                                     <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
@@ -64,7 +52,7 @@ class Shipping extends Component {
                             </FormGroup>
                         </View>
                         <View style={Styles.col6}>
-                            <FormGroup>
+                            <FormGroup style={styles.formGroupStyle}>
                                 <FormGroup.Label style={Styles.formLabel}>Package Width</FormGroup.Label>
                                 <FormGroup.InputGroup style={Styles.inputGroupStyle}>
                                     <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
@@ -72,7 +60,7 @@ class Shipping extends Component {
                             </FormGroup>
                         </View>
                         <View style={Styles.col6}>
-                            <FormGroup>
+                            <FormGroup style={styles.formGroupStyle}>
                                 <FormGroup.Label style={Styles.formLabel}>Package Height</FormGroup.Label>
                                 <FormGroup.InputGroup style={Styles.inputGroupStyle}>
                                     <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
@@ -82,11 +70,15 @@ class Shipping extends Component {
                     </View>
                     <FormGroup>
                         <FormGroup.Label style={Styles.formLabel}>Show on New Arrival Collection</FormGroup.Label>
-                        <Switch value={this.state.isSwitchOn} onValueChange={this.onToggleSwitch} />
+                        <SwitchWrapper>
+                            <SwithText>No</SwithText>
+                            <CustomeSwitch value={this.state.isSwitchOn} onValueChange={this.onToggleSwitch} />
+                            <SwithText>Yes</SwithText>
+                        </SwitchWrapper>
                     </FormGroup>
                     <View style={Styles.row}>
                         <View style={Styles.col6}>
-                            <FormGroup>
+                            <FormGroup style={styles.formGroupStyle}>
                                 <FormGroup.Label style={Styles.formLabel}>Min Order Q.</FormGroup.Label>
                                 <FormGroup.InputGroup style={Styles.inputGroupStyle}>
                                     <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
@@ -94,7 +86,7 @@ class Shipping extends Component {
                             </FormGroup>
                         </View>
                         <View style={Styles.col6}>
-                            <FormGroup>
+                            <FormGroup style={styles.formGroupStyle}>
                                 <FormGroup.Label style={Styles.formLabel}>Max Order Q.</FormGroup.Label>
                                 <FormGroup.InputGroup style={Styles.inputGroupStyle}>
                                     <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
@@ -151,35 +143,21 @@ const AnimScrollView = styled(Animated.ScrollView)`
     padding-top: 10px;
     background-color: ${COLORS.background};
 `;
-
-const PickerWrapper = styled.View`
-    border: 1px solid ${COLORS.primary};
-    background-color: ${COLORS.white};
+const SwitchWrapper = styled.View`
+    flex: 1;
+    flex-direction: row;
 `;
 
-const PTagInput = styled(TagInput)`
+const CustomeSwitch = styled(Switch)`
     border: 1px solid red;
 `;
 
+const SwithText = styled.Text`
+    font-size: 18px;
+`;
+
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: mainColor,
-    },
-    textInput: {
-        height: 40,
-        borderColor: 'white',
-        borderWidth: 1,
-        marginTop: 8,
-        borderRadius: 5,
-        padding: 3,
-    },
-    tag: {
-        backgroundColor: '#fff',
-    },
-    tagText: {
-        color: mainColor,
+    formGroupStyle: {
+        width: '95%',
     },
 });

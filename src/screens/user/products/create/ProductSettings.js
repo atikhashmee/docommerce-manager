@@ -47,13 +47,28 @@ class ProductSettings extends Component {
                 <AnimScrollView style={[Styles.topContainer]}>
                     <Styles.PageHeader>Settings</Styles.PageHeader>
                     <FormGroup>
-                        <FormGroup.Label style={Styles.formLabel}>Main Category</FormGroup.Label>
-                        <PickerWrapper>
-                            <Picker selectedValue={this.state.selectedLanguage} onValueChange={(itemValue, itemIndex) => this.setState({selectedLanguage: itemValue})}>
-                                <Picker.Item label="Main Category" value="" />
-                                <Picker.Item label="Inactive" value="inactive" />
-                            </Picker>
-                        </PickerWrapper>
+                        <FormGroup.Label style={Styles.formLabel}>Tax Applicable</FormGroup.Label>
+                        <SwitchWrapper>
+                            <SwithText>ON</SwithText>
+                            <CustomeSwitch value={this.state.isSwitchOn} onValueChange={this.onToggleSwitch} />
+                            <SwithText>OFF</SwithText>
+                        </SwitchWrapper>
+                    </FormGroup>
+                    <FormGroup>
+                        <FormGroup.Label style={Styles.formLabel}>Show product when out of stock</FormGroup.Label>
+                        <SwitchWrapper>
+                            <SwithText>ON</SwithText>
+                            <CustomeSwitch value={this.state.isSwitchOn} onValueChange={this.onToggleSwitch} />
+                            <SwithText>OFF</SwithText>
+                        </SwitchWrapper>
+                    </FormGroup>
+                    <FormGroup>
+                        <FormGroup.Label style={Styles.formLabel}>Check stock during add to cart</FormGroup.Label>
+                        <SwitchWrapper>
+                            <SwithText>ON</SwithText>
+                            <CustomeSwitch value={this.state.isSwitchOn} onValueChange={this.onToggleSwitch} />
+                            <SwithText>OFF</SwithText>
+                        </SwitchWrapper>
                     </FormGroup>
                 </AnimScrollView>
             </View>
@@ -78,13 +93,17 @@ const AnimScrollView = styled(Animated.ScrollView)`
     background-color: ${COLORS.background};
 `;
 
-const PickerWrapper = styled.View`
-    border: 1px solid ${COLORS.primary};
-    background-color: ${COLORS.white};
+const SwitchWrapper = styled.View`
+    flex: 1;
+    flex-direction: row;
 `;
 
-const PTagInput = styled(TagInput)`
+const CustomeSwitch = styled(Switch)`
     border: 1px solid red;
+`;
+
+const SwithText = styled.Text`
+    font-size: 18px;
 `;
 
 const styles = StyleSheet.create({
@@ -93,19 +112,5 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: mainColor,
-    },
-    textInput: {
-        height: 40,
-        borderColor: 'white',
-        borderWidth: 1,
-        marginTop: 8,
-        borderRadius: 5,
-        padding: 3,
-    },
-    tag: {
-        backgroundColor: '#fff',
-    },
-    tagText: {
-        color: mainColor,
     },
 });
