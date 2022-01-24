@@ -29,7 +29,7 @@ class PricingInventoryStepThree extends Component {
             <View style={Styles.container}>
                 <Header navigation={this.props.navigation} title="Add New Product" showBack={true} />
                 <Spinner visible={spinner} textContent={'Loading...'} />
-                <AnimScrollView style={[Styles.topContainer]}>
+                <AnimScrollView>
                     <Styles.PageHeader>Variant Pricing -- 3</Styles.PageHeader>
                     <VariantPricingWrapper>
                         <VariantHeading>XL</VariantHeading>
@@ -212,7 +212,7 @@ const VariantHeading = styled.Text`
 const VariantPricingWrapper = styled.View`
     border: 1px solid ${COLORS.background};
     margin-top: 3px;
-    margin-bottom: 3px;
+    margin-bottom: 20px;
 `;
 
 const BlockName = styled.Text`

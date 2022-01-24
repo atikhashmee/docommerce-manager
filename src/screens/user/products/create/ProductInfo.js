@@ -93,4 +93,5 @@ const AnimScrollView = styled(Animated.ScrollView)`
 const PickerWrapper = styled.View`
     border: 1px solid ${COLORS.primary};
     background-color: ${COLORS.white};
+    border-radius: 4px;
 `;

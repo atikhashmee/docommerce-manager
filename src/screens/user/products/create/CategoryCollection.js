@@ -26,6 +26,8 @@ class CategoryCollection extends Component {
                 tag: '',
                 tagsArray: [],
             },
+            tagsColor: mainColor,
+            tagsText: '#fff',
             isSwitchOn: false,
         };
     }
@@ -46,7 +48,7 @@ class CategoryCollection extends Component {
                 <Spinner visible={spinner} textContent={'Loading...'} />
                 <AnimScrollView style={[Styles.topContainer]}>
                     <Styles.PageHeader>Category & Collection</Styles.PageHeader>
-                    <FormGroup>
+                    <FormGroup style={styles.formGroupStyle}>
                         <FormGroup.Label style={Styles.formLabel}>Main Category</FormGroup.Label>
                         <PickerWrapper>
                             <Picker selectedValue={this.state.selectedLanguage} onValueChange={(itemValue, itemIndex) => this.setState({selectedLanguage: itemValue})}>
@@ -55,7 +57,7 @@ class CategoryCollection extends Component {
                             </Picker>
                         </PickerWrapper>
                     </FormGroup>
-                    <FormGroup>
+                    <FormGroup style={styles.formGroupStyle}>
                         <FormGroup.Label style={Styles.formLabel}>Categories</FormGroup.Label>
                         <PickerWrapper>
                             <Picker selectedValue={this.state.selectedLanguage} onValueChange={(itemValue, itemIndex) => this.setState({selectedLanguage: itemValue})}>
@@ -64,36 +66,42 @@ class CategoryCollection extends Component {
                             </Picker>
                         </PickerWrapper>
                     </FormGroup>
-                    <FormGroup>
+                    <FormGroup style={styles.formGroupStyle}>
                         <FormGroup.Label style={Styles.formLabel}>Tags</FormGroup.Label>
-                        <PickerWrapper>
-                            <PTagInput
-                                updateState={this.updateTagState}
-                                tags={this.state.tags}
-                                placeholder="Tags..."
-                                label="Press comma & space to add a tag"
-                                labelStyle={{color: '#fff'}}
-                                leftElement={<Icon name={'tag-multiple'} type={'material-community'} color={this.state.tagsText} />}
-                                leftElementContainerStyle={{marginLeft: 3}}
-                                containerStyle={{width: Dimensions.get('window').width - 40}}
-                                inputContainerStyle={[styles.textInput, {backgroundColor: this.state.tagsColor}]}
-                                inputStyle={{color: this.state.tagsText}}
-                                onFocus={() => this.setState({tagsColor: '#fff', tagsText: mainColor})}
-                                onBlur={() => this.setState({tagsColor: mainColor, tagsText: '#fff'})}
-                                autoCorrect={false}
-                                tagStyle={styles.tag}
-                                tagTextStyle={styles.tagText}
-                                keysForTag={', '}
-                            />
-                        </PickerWrapper>
+                        <PTagInput
+                            updateState={this.updateTagState}
+                            tags={this.state.tags}
+                            placeholder="Tags..."
+                            // label="Press comma & space to add a tag"
+                            // labelStyle={{color: '#000'}}
+                            // leftElement={<Icon name={'tag-multiple'} type={'material-community'} color={this.state.tagsText} />}
+                            // leftElementContainerStyle={{marginLeft: 3}}
+                            containerStyle={styles.tagInputContainerStyle}
+                            inputContainerStyle={[styles.textInput, {backgroundColor: COLORS.white, margin: 0}]}
+                            inputStyle={{color: this.state.tagsText}}
+                            onFocus={() => this.setState({tagsColor: '#fff', tagsText: mainColor})}
+                            onBlur={() => this.setState({tagsColor: mainColor, tagsText: '#fff'})}
+                            autoCorrect={false}
+                            tagStyle={styles.tag}
+                            tagTextStyle={styles.tagText}
+                            keysForTag={', '}
+                        />
                     </FormGroup>
                     <FormGroup>
                         <FormGroup.Label style={Styles.formLabel}>Show on Featured Collection</FormGroup.Label>
-                        <Switch value={this.state.isSwitchOn} onValueChange={this.onToggleSwitch} />
+                        <SwitchWrapper>
+                            <SwithText>OFF</SwithText>
+                            <CustomeSwitch value={this.state.isSwitchOn} onValueChange={this.onToggleSwitch} />
+                            <SwithText>ON</SwithText>
+                        </SwitchWrapper>
                     </FormGroup>
                     <FormGroup>
                         <FormGroup.Label style={Styles.formLabel}>Show on New Arrival Collection</FormGroup.Label>
-                        <Switch value={this.state.isSwitchOn} onValueChange={this.onToggleSwitch} />
+                        <SwitchWrapper>
+                            <SwithText>OFF</SwithText>
+                            <CustomeSwitch value={this.state.isSwitchOn} onValueChange={this.onToggleSwitch} />
+                            <SwithText>ON</SwithText>
+                        </SwitchWrapper>
                     </FormGroup>
                 </AnimScrollView>
             </View>
@@ -121,10 +129,27 @@ const AnimScrollView = styled(Animated.ScrollView)`
 const PickerWrapper = styled.View`
     border: 1px solid ${COLORS.primary};
     background-color: ${COLORS.white};
+    border-radius: 4px;
 `;
 
 const PTagInput = styled(TagInput)`
+    width: 100%;
+    border: 1px solid ${COLORS.primary};
+    border-radius: 4px;
+`;
+
+const SwitchWrapper = styled.View`
+    flex: 1;
+    flex-direction: row;
+`;
+
+const CustomeSwitch = styled(Switch)`
     border: 1px solid red;
+`;
+
+const SwithText = styled.Text`
+    font-size: 18px;
+    color: #000;
 `;
 
 const styles = StyleSheet.create({
@@ -135,17 +160,27 @@ const styles = StyleSheet.create({
         backgroundColor: mainColor,
     },
     textInput: {
-        height: 40,
         borderColor: 'white',
         borderWidth: 1,
-        marginTop: 8,
         borderRadius: 5,
-        padding: 3,
     },
     tag: {
         backgroundColor: '#fff',
+        borderWidth: 1,
+        borderColor: COLORS.primary,
+        padding: 2,
     },
     tagText: {
-        color: mainColor,
+        color: COLORS.black,
+    },
+    formGroupStyle: {
+        width: '100%',
+        paddingVertical: 0,
+        paddingHorizontal: 0,
+    },
+    tagInputContainerStyle: {
+        width: '100%',
+        margin: 0,
+        paddingHorizontal: 0,
     },
 });
