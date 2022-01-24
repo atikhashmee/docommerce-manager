@@ -16,6 +16,7 @@ export const COLORS = {
     orange: '#FFD300',
     purple: '#81368f',
     invisible: '#0000',
+    red: 'red',
     gradientButton: ['#FF0000', '#e2171d'],
 };
 
