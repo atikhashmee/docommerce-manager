@@ -10,19 +10,25 @@ import profile from '../../../data/profile';
  | User State Actions Started
  | ====================================================================================
 */
-export const login = () => (dispatch) => {
+export const login = (obj) => (dispatch) => {
     return new Promise(async (resolve, reject) => {
         const fcm_token = await FCMService.getToken();
-        console.log('fcm_token', fcm_token);
-        setTimeout(() => {
-            try {
-                dispatch(setToken(fcm_token));
-                dispatch(signInActions());
-                resolve(profile);
-            } catch (error) {
-                reject(error);
-            }
-        }, 1000);
+        APIKit.post('/auth/login', {email: obj.email, password: obj.password})
+            .then((response) => {
+                logResponse(response);
+            })
+            .catch((error) => {
+                logError(error);
+            });
+        // setTimeout(() => {
+        //     try {
+        //         dispatch(setToken(fcm_token));
+        //         dispatch(signInActions());
+        //         resolve(profile);
+        //     } catch (error) {
+        //         reject(error);
+        //     }
+        // }, 1000);
     });
 };
 

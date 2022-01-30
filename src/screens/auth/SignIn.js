@@ -19,7 +19,7 @@ class SignIn extends Component {
         super(props);
         this.state = {
             spinner: false,
-            mobile: '',
+            email: '',
             password: '',
             secureTextEntry: true,
             passwordVisibled: false,
@@ -27,7 +27,7 @@ class SignIn extends Component {
     }
 
     componentDidUpdate() {
-        console.log(this.state);
+        //console.log(this.state);
     }
 
     updateSecureTextEntry = () => {
@@ -37,7 +37,7 @@ class SignIn extends Component {
     onPressSubmit = () => {
         this.setState({spinner: true});
         this.props
-            .login({mobile: this.state.mobile})
+            .login({email: this.state.email, password: this.state.password})
             .then((response) => {
                 //
             })
@@ -57,12 +57,7 @@ class SignIn extends Component {
                             <FormGroup>
                                 <FormGroup.Label style={styles.label}>Email</FormGroup.Label>
                                 <FormGroup.InputGroup style={styles.inputGroupStyle}>
-                                    <FormGroup.TextInput
-                                        placeholder="John@example.com"
-                                        keyboardType="phone-pad"
-                                        maxLength={11}
-                                        onChangeText={(val) => this.setState({mobile: val})}
-                                    />
+                                    <FormGroup.TextInput placeholder="John@example.com" onChangeText={(val) => this.setState({email: val})} />
                                 </FormGroup.InputGroup>
                             </FormGroup>
                             <FormGroup>
