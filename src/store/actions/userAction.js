@@ -13,11 +13,42 @@ import profile from '../../../data/profile';
 export const login = (obj) => (dispatch) => {
     return new Promise(async (resolve, reject) => {
         const fcm_token = await FCMService.getToken();
-        APIKit.post('/auth/login', {email: obj.email, password: obj.password})
+        // const formData = new FormData();
+        // formData.append("email", obj.email);
+        // formData.append("password", obj.password);
+
+        // const _this = this;
+        // fetch(Api.fileStore, {
+        //     method: 'POST',
+        //     headers: {
+		// 		'Content-Type': 'multipart/form-data',
+        //         Accept: 'application/json',
+        //         Authorization: `Bearer ${_this.state.token}`,
+        //     },
+        //     body: formData,
+        // }).then((response) => response.json()).then((res) => {
+        //     _this.setState({ spinner: false });
+
+        //     if (res.success) {
+        //         _this.getData();
+        //         _this.setState({upload_file: null});
+        //         _this.setState({note: ''});
+        //     }
+            
+        //     _this.setState({ message: res.message });
+        //     _this.setState({ showAlert: true });
+        // }).catch(function(error) {
+        //     _this.setState({ spinner: false });
+        //     _this.setState({ message: error.message });
+        //     _this.setState({ showAlert: true });
+        // });
+        APIKit.post('/auth/login', {email: "iffatalrokib639@gmail.com", password: "12345678"})
             .then((response) => {
-                logResponse(response);
+                console.log('success: ', response);
+                //logResponse(response);
             })
             .catch((error) => {
+                console.log('error: ', error, obj);
                 logError(error);
             });
         // setTimeout(() => {
