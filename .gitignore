@@ -61,3 +61,4 @@ buck-out/
 .env
 android/local.properties
 google-services.json
+git.sh
