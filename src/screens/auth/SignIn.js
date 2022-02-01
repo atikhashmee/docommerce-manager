@@ -21,12 +21,13 @@ class SignIn extends Component {
             spinner: false,
             email: '',
             password: '',
+            app_id: '',
             secureTextEntry: true,
             passwordVisibled: false,
         };
     }
 
-    
+
 
     componentDidUpdate() {
         //console.log(this.state);
@@ -40,7 +41,7 @@ class SignIn extends Component {
         this.setState({spinner: true});
         this.props
             // .login({email: this.state.email, password: this.state.password})
-            .login({email: "iffatalrokib639@gmail.com", password: "12345678"})
+            .login({email: "iffatalrokib639@gmail.com", password: "12345678", app_id: 2})
             .then((response) => {
                 //
             })
@@ -71,6 +72,12 @@ class SignIn extends Component {
                                         {!this.state.secureTextEntry && <Text>{icons.eye}</Text>}
                                         {this.state.secureTextEntry && <Text>{icons.eye_slash}</Text>}
                                     </TouchableOpacity>
+                                </FormGroup.InputGroup>
+                            </FormGroup>
+                            <FormGroup>
+                                <FormGroup.Label style={styles.label}>App ID</FormGroup.Label>
+                                <FormGroup.InputGroup style={styles.inputGroupStyle}>
+                                    <FormGroup.TextInput placeholder="App ID" onChangeText={(val) => this.setState({app_id: val})} />
                                 </FormGroup.InputGroup>
                             </FormGroup>
                         </View>
