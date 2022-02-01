@@ -37,7 +37,8 @@ class SignIn extends Component {
     onPressSubmit = () => {
         this.setState({spinner: true});
         this.props
-            .login({email: this.state.email, password: this.state.password})
+            // .login({email: this.state.email, password: this.state.password})
+            .login({email: "iffatalrokib639@gmail.com", password: "12345678"})
             .then((response) => {
                 //
             })

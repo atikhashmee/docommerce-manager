@@ -4,6 +4,7 @@ import APIKit, {setClientToken} from '../../config/axios';
 import {logError, LogRejectedMessage, logResponse} from '@/helpers';
 import FCMService from '@/services/FCMService';
 import profile from '../../../data/profile';
+import {ToastAndroid} from 'react-native'
 
 /*
  | ====================================================================================
@@ -13,53 +14,27 @@ import profile from '../../../data/profile';
 export const login = (obj) => (dispatch) => {
     return new Promise(async (resolve, reject) => {
         const fcm_token = await FCMService.getToken();
-        // const formData = new FormData();
-        // formData.append("email", obj.email);
-        // formData.append("password", obj.password);
-
-        // const _this = this;
-        // fetch(Api.fileStore, {
-        //     method: 'POST',
-        //     headers: {
-		// 		'Content-Type': 'multipart/form-data',
-        //         Accept: 'application/json',
-        //         Authorization: `Bearer ${_this.state.token}`,
-        //     },
-        //     body: formData,
-        // }).then((response) => response.json()).then((res) => {
-        //     _this.setState({ spinner: false });
-
-        //     if (res.success) {
-        //         _this.getData();
-        //         _this.setState({upload_file: null});
-        //         _this.setState({note: ''});
-        //     }
-            
-        //     _this.setState({ message: res.message });
-        //     _this.setState({ showAlert: true });
-        // }).catch(function(error) {
-        //     _this.setState({ spinner: false });
-        //     _this.setState({ message: error.message });
-        //     _this.setState({ showAlert: true });
-        // });
-        APIKit.post('/auth/login', {email: "iffatalrokib639@gmail.com", password: "12345678"})
+        APIKit.post('/auth/login', obj)
             .then((response) => {
-                console.log('success: ', response);
-                //logResponse(response);
+                let responsedata = response.data;
+                let user_token = responsedata.access_token;
+                dispatch(setToken(user_token));
+                dispatch(signInActions());
+                resolve(response);
             })
             .catch((error) => {
-                console.log('error: ', error, obj);
-                logError(error);
+                let error_status = error.response.status;
+                let error_data = error.response.data;
+                if (error_status === 422) {
+                    for (const err in error_data) {
+                        ToastAndroid.show(errors[err][0], ToastAndroid.SHORT);
+                    }
+                } else if (error_status === 401) {
+                    ToastAndroid.show(error_data.error, ToastAndroid.SHORT);
+                }
+                reject(error);
+                //logError(error);
             });
-        // setTimeout(() => {
-        //     try {
-        //         dispatch(setToken(fcm_token));
-        //         dispatch(signInActions());
-        //         resolve(profile);
-        //     } catch (error) {
-        //         reject(error);
-        //     }
-        // }, 1000);
     });
 };
 
@@ -71,7 +46,7 @@ export const logout = () => (dispatch) => {
 
 export const resetState = () => (dispatch) => {
     dispatch({type: TYPES.RESET_STATE});
-    // APIKit.post('/logout').then((response) => logResponse(response));
+    APIKit.post('/api/logout').then((response) => logResponse(response));
 };
 
 export const setToken = (token) => (dispatch, getState) => {
@@ -86,14 +61,14 @@ export const setToken = (token) => (dispatch, getState) => {
 
 export const loadProfile = () => (dispatch, getState) => {
     return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            try {
-                dispatch(setAuthUser(profile));
-                resolve(profile);
-            } catch (error) {
-                reject(error);
-            }
-        }, 1000);
+        APIKit.post('/api/me')
+        .then((response) => {
+            dispatch(setAuthUser(response.data));
+            resolve(response);
+        })
+        .catch((error) => {
+            reject(error);
+        });
     });
 };
 

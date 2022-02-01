@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
-import {SafeAreaView, ScrollView, Text, View} from 'react-native';
+import {SafeAreaView, ScrollView, Text, View, ToastAndroid} from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Styles from '@styles';
 import Header from '@components/inc/Header';
 import styled, {css} from 'styled-components';
 import {COLORS, icons, SIZES} from '@constants';
+import {connect} from 'react-redux';
 
 class HomeScreen extends Component {
     constructor(props) {
@@ -19,6 +20,10 @@ class HomeScreen extends Component {
         this.props.navigation.navigate('ProductCreateScreen');
     }
 
+    toastr() {
+        ToastAndroid.show("A pikachu appeared nearby !", ToastAndroid.SHORT);
+    }
+
     render() {
         return (
             <View style={Styles.container}>
@@ -26,12 +31,12 @@ class HomeScreen extends Component {
                 <Spinner visible={this.state.spinner} textContent={'Loading...'} />
                 <WrappingView>
                     <TopView>
-                        <Text>Hello world</Text>
+                        <Text>{this.props.authUser?.name} -- {this.props.authUser?.store?.name}</Text>
                     </TopView>
                     <MiddleView>
                         <View style={Styles.row}>
                             <View style={Styles.col4}>
-                                <CounterBox>
+                                <CounterBox onPress={() => this.toastr()}>
                                     <IconHolder>{icons.users}</IconHolder>
                                     <CounterNumber>15412</CounterNumber>
                                     <CounterText>Total Users</CounterText>
@@ -120,7 +125,7 @@ const counterCss = css`
     font-family: montserrat-regular;
     color: ${COLORS.nero};
 `;
-const CounterBox = styled.View`
+const CounterBox = styled.Pressable`
     text-align: center;
     align-items: center;
 `;
@@ -167,4 +172,11 @@ const A = styled.Pressable`
     height: 100%;
 `;
 
-export default HomeScreen;
+const mapStateToProps = (state) => {
+    return {
+        token: state.userReducer && state.userReducer.token,
+        authUser: state.userReducer && state.userReducer.authUser,
+    };
+};
+
+export default connect(mapStateToProps)(HomeScreen);

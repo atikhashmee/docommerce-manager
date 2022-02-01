@@ -10,7 +10,7 @@ export const CommonAPIKit = axios.create({
 });
 
 // Set JSON Web Token in Client to be included in all calls
-export const setClientToken = (token: string) => {
+export const setClientToken = (token) => {
     APIKit.defaults.headers.common.Authorization = token ? `Bearer ${token}` : '';
     CommonAPIKit.defaults.headers.common.Authorization = token ? `Bearer ${token}` : '';
 };
