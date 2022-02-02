@@ -190,6 +190,7 @@ const AnimScrollView = styled(Animated.ScrollView)`
 const SwitchWrapper = styled.View`
     flex: 1;
     flex-direction: row;
+    min-height: 30px;
 `;
 
 const CustomeSwitch = styled(Switch)`

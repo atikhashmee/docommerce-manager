@@ -9,6 +9,7 @@ import Header from './Header';
 import styled from 'styled-components/native';
 import {COLORS} from '@constants';
 import {Picker} from '@react-native-picker/picker';
+import {handleProductObjProperty} from '@actions/productActions'
 
 const Style = StyleSheet.create({
     textAreaStyle: {
@@ -26,8 +27,13 @@ class ProductInfo extends Component {
         };
     }
 
+    handleInputField(evt, key) {
+        this.props.handleProductObjProperty(evt, key);
+    }
+
     render() {
         const {spinner} = this.state;
+        const {product} = this.props;
         return (
             <View style={Styles.container}>
                 <Header navigation={this.props.navigation} title="Add New Product" showBack={true} />
@@ -37,31 +43,34 @@ class ProductInfo extends Component {
                     <FormGroup>
                         <FormGroup.Label style={Styles.formLabel}>Product Name</FormGroup.Label>
                         <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                            <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                            <FormGroup.TextInput onChangeText={(val) => this.handleInputField(val, 'name')} />
                         </FormGroup.InputGroup>
                     </FormGroup>
                     <FormGroup>
                         <FormGroup.Label style={Styles.formLabel}>Product Page URL</FormGroup.Label>
                         <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                            <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                            <FormGroup.TextInput onChangeText={(val) => this.handleInputField(val, 'slug')} />
                         </FormGroup.InputGroup>
                     </FormGroup>
                     <FormGroup>
                         <FormGroup.Label style={Styles.formLabel}>Product Short Description</FormGroup.Label>
                         <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                            <FormGroup.TextInput style={Style.textAreaStyle} onChangeText={(val) => this.setState({mobile: val})} multiline numberOfLines={4} editable />
+                            <FormGroup.TextInput style={Style.textAreaStyle} onChangeText={(val) => this.handleInputField(val, 'short_description')} multiline numberOfLines={4} editable />
                         </FormGroup.InputGroup>
                     </FormGroup>
                     <FormGroup>
                         <FormGroup.Label style={Styles.formLabel}>Product Description</FormGroup.Label>
                         <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                            <FormGroup.TextInput style={Style.textAreaStyle} onChangeText={(val) => this.setState({mobile: val})} multiline numberOfLines={6} editable />
+                            <FormGroup.TextInput style={Style.textAreaStyle} onChangeText={(val) => this.handleInputField(val, 'description')} multiline numberOfLines={6} editable />
                         </FormGroup.InputGroup>
                     </FormGroup>
                     <FormGroup>
                         <FormGroup.Label style={Styles.formLabel}>Status</FormGroup.Label>
                         <PickerWrapper>
-                            <Picker selectedValue={this.state.selectedLanguage} onValueChange={(itemValue, itemIndex) => this.setState({selectedLanguage: itemValue})}>
+                            <Picker selectedValue={this.state.selectedLanguage} onValueChange={(itemValue, itemIndex) => {
+                                this.setState({selectedLanguage: itemValue}); 
+                                this.handleInputField(itemValue, 'status');
+                                }}>
                                 <Picker.Item label="Active" value="active" />
                                 <Picker.Item label="Inactive" value="inactive" />
                             </Picker>
@@ -77,10 +86,11 @@ const mapStateToProps = (state) => {
     return {
         token: state.userReducer && state.userReducer.token,
         authUser: state.userReducer && state.userReducer.authUser,
+        product: state.productReducer && state.productReducer.product,
     };
 };
 
-export default connect(mapStateToProps)(ProductInfo);
+export default connect(mapStateToProps, {handleProductObjProperty})(ProductInfo);
 
 const AnimScrollView = styled(Animated.ScrollView)`
     flex: 1;
