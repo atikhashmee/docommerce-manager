@@ -8,12 +8,11 @@ import Styles from '@styles';
 import Header from './Header';
 import styled from 'styled-components/native';
 import { COLORS } from '@constants';
-import { Picker } from '@react-native-picker/picker';
 import TagInput from 'react-native-tags-input';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Switch } from 'react-native-paper';
 import APIKit from '../../../../config/axios'
 import DropDownPicker from 'react-native-dropdown-picker';
+import {handleProductObjProperty} from '@actions/productActions'
 
 const mainColor = '#3ca897';
 
@@ -35,7 +34,8 @@ class CategoryCollection extends Component {
             mainCategoryOpen: false,
             mainCategoryValue: null,
             categoryOpen: false,
-            categoryValue: null,
+            categoryValue: [],
+            categoryLoading: false,
         };
         this.setMainCategoryOpen = this.setMainCategoryOpen.bind(this);
         this.setMainCategoryValue = this.setMainCategoryValue.bind(this);
@@ -72,17 +72,16 @@ class CategoryCollection extends Component {
             })
         }
         if (allCategories.length > 0) {
-            this.setState({ categories: allCategories })
+            this.setState({ categories: allCategories, categoryLoading: true })
+
         }
     }
 
     updateTagState = (state) => {
         this.setState({
             tags: state,
-        });
+        },  () => { this.props.handleProductObjProperty(this.state.tags.tagsArray, 'tags')});
     };
-
-    onToggleSwitch = () => this.setState({ isSwitchOn: !this.state.isSwitchOn });
 
     setMainCategoryOpen(mainCategoryOpen) {
         this.setState({mainCategoryOpen});
@@ -92,10 +91,13 @@ class CategoryCollection extends Component {
     }
 
     setMainCategoryValue(callback) {
-        this.setState(state => ({mainCategoryValue: callback(state.mainCategoryValue)}));
+        this.setState(state => ({mainCategoryValue: callback(state.mainCategoryValue)}), 
+        () => { this.props.handleProductObjProperty(this.state.mainCategoryValue, 'category_id')});
     }
     setCategoryValue(callback) {
-        this.setState(state => ({categoryValue: callback(state.categoryValue)}));
+        this.setState(state => ({categoryValue: callback(state.categoryValue)}),
+        () => { this.props.handleProductObjProperty(this.state.categoryValue, 'other_categories')}
+        );
     }
 
     setItems(callback) {
@@ -103,7 +105,8 @@ class CategoryCollection extends Component {
     }
 
     render() {
-        const { spinner, mainCategoryOpen, mainCategoryValue, categoryOpen, categoryValue, categories } = this.state;
+        const { spinner, mainCategoryOpen, categoryLoading, mainCategoryValue, categoryOpen, categoryValue, categories } = this.state;
+        const {  product } = this.props;
         return (
             <View style={Styles.container}>
                 <Header navigation={this.props.navigation} title="Add New Product" showBack={true} />
@@ -113,6 +116,7 @@ class CategoryCollection extends Component {
                     <FormGroup style={styles.formGroupStyle}>
                         <FormGroup.Label style={Styles.formLabel}>Main Category</FormGroup.Label>
                         <DropDownPicker
+                            loading={categoryLoading}
                             open={mainCategoryOpen}
                             value={mainCategoryValue}
                             items={categories}
@@ -128,8 +132,10 @@ class CategoryCollection extends Component {
                     <FormGroup style={styles.formGroupStyle}>
                         <FormGroup.Label style={Styles.formLabel}>Categories</FormGroup.Label>
                         <DropDownPicker
+                            loading={categoryLoading}
                             open={categoryOpen}
                             value={categoryValue}
+                            multiple={true}
                             items={categories}
                             setOpen={this.setCategoryOpen}
                             setValue={this.setCategoryValue}
@@ -166,7 +172,9 @@ class CategoryCollection extends Component {
                         <FormGroup.Label style={Styles.formLabel}>Show on Featured Collection</FormGroup.Label>
                         <SwitchWrapper>
                             <SwithText>OFF</SwithText>
-                            <CustomeSwitch value={this.state.isSwitchOn} onValueChange={this.onToggleSwitch} />
+                            <CustomeSwitch value={product.feature} onValueChange={(evt) => {
+                               this.props.handleProductObjProperty(evt, 'feature')
+                            }} />
                             <SwithText>ON</SwithText>
                         </SwitchWrapper>
                     </FormGroup>
@@ -174,7 +182,9 @@ class CategoryCollection extends Component {
                         <FormGroup.Label style={Styles.formLabel}>Show on New Arrival Collection</FormGroup.Label>
                         <SwitchWrapper>
                             <SwithText>OFF</SwithText>
-                            <CustomeSwitch value={this.state.isSwitchOn} onValueChange={this.onToggleSwitch} />
+                            <CustomeSwitch value={product.new_arrival} onValueChange={(evt) => {
+                               this.props.handleProductObjProperty(evt, 'new_arrival')
+                            }} />
                             <SwithText>ON</SwithText>
                         </SwitchWrapper>
                     </FormGroup>
@@ -188,10 +198,11 @@ const mapStateToProps = (state) => {
     return {
         token: state.userReducer && state.userReducer.token,
         authUser: state.userReducer && state.userReducer.authUser,
+        product: state.productReducer && state.productReducer.product,
     };
 };
 
-export default connect(mapStateToProps)(CategoryCollection);
+export default connect(mapStateToProps, {handleProductObjProperty})(CategoryCollection);
 //Animated.ScrollView
 const AnimScrollView = styled.View`
     flex: 1;
@@ -216,6 +227,7 @@ const PTagInput = styled(TagInput)`
 const SwitchWrapper = styled.View`
     flex: 1;
     flex-direction: row;
+    min-height: 30px;
 `;
 
 const CustomeSwitch = styled(Switch)`

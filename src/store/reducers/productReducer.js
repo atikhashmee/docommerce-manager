@@ -16,8 +16,8 @@ const initialState ={
         check_stock_during_add_to_cart: null,
         international_shipping: null,
         local_delivery: null,
-        feature: null,
-        new_arrival: null,
+        feature: false,
+        new_arrival: false,
         weight: null,
         length: null,
         width: null,
@@ -45,6 +45,8 @@ const initialState ={
         store_id: null,
         admin_id: null,
         sequence_id: null,
+        other_categories: [],
+        tags: [],
     }
 }
 
