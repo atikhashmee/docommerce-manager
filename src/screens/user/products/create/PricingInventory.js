@@ -14,6 +14,7 @@ import APIKit from '../../../../config/axios'
 import {Switch} from 'react-native-paper';
 import {handleProductObjProperty} from '@actions/productActions'
 import DropDownPicker from 'react-native-dropdown-picker';
+import TagInput from 'react-native-tags-input';
 
 const mainColor = '#3ca897';
 
@@ -27,6 +28,16 @@ class PricingInventory extends Component {
             warehouseOpen: false,
             warehouseValue: null,
             warehouseLoading: false,
+
+            variantOptions: [],
+            selectedVariantOption:null,
+
+            tags: {
+                tag: '',
+                tagsArray: [],
+            }, 
+            tagsColor: mainColor,
+            tagsText: '#fff',
         };
 
         this.setwarehouseOpen = this.setwarehouseOpen.bind(this);
@@ -72,6 +83,21 @@ class PricingInventory extends Component {
         this.setState(state => ({items: callback(state.warehouses)}));
     }
 
+    updateTagState = (state) => {
+        this.setState({tags: state});
+    };
+
+    addVariantOptions() {
+        let var_options = [...this.state.variantOptions];
+        if (this.state.selectedVariantOption !==null && this.state.tags.tagsArray.length > 0) {
+            var_options.push({option: this.state.selectedVariantOption, value: [...this.state.tags.tagsArray]})
+        }
+        this.setState({variantOptions: var_options});
+        this.setState({tags: {
+            tag: '',
+            tagsArray: [],
+        }});
+    }
 
     render() {
         const {spinner, warehouses, warehouseOpen, warehouseValue} = this.state;
@@ -183,11 +209,14 @@ class PricingInventory extends Component {
                                         <FormGroup.Label style={Styles.formLabel}>Categories</FormGroup.Label>
                                         <PickerWrapper>
                                             <Picker
-                                                selectedValue={this.state.selectedLanguage}
-                                                onValueChange={(itemValue, itemIndex) => this.setState({selectedLanguage: itemValue})}>
+                                                selectedValue={this.state.selectedVariantOption}
+                                                onValueChange={(itemValue, itemIndex) => this.setState({selectedVariantOption: itemValue})}>
                                                 <Picker.Item label="Select Options" value="" />
                                                 <Picker.Item label="Size" value="size" />
                                                 <Picker.Item label="Color" value="color" />
+                                                <Picker.Item label="Material" value="material" />
+                                                <Picker.Item label="Style" value="style" />
+                                                <Picker.Item label="Title" value="title" />
                                             </Picker>
                                         </PickerWrapper>
                                     </FormGroup>
@@ -195,17 +224,33 @@ class PricingInventory extends Component {
                                 <View style={Styles.col12}>
                                     <FormGroup style={styles.formGroupStyle}>
                                         <FormGroup.Label style={Styles.formLabel}>Value</FormGroup.Label>
-                                        <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                            <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
-                                        </FormGroup.InputGroup>
+                                        <PTagInput
+                                            updateState={this.updateTagState}
+                                            tags={this.state.tags}
+                                            placeholder="value..."
+                                            // label="Press comma & space to add a tag"
+                                            // labelStyle={{color: '#000'}}
+                                            // leftElement={<Icon name={'tag-multiple'} type={'material-community'} color={this.state.tagsText} />}
+                                            // leftElementContainerStyle={{marginLeft: 3}}
+                                            containerStyle={styles.tagInputContainerStyle}
+                                            inputContainerStyle={[styles.textInput, { backgroundColor: COLORS.white, margin: 0 }]}
+                                            inputStyle={{ color: this.state.tagsText }}
+                                            onFocus={() => this.setState({ tagsColor: '#fff', tagsText: mainColor })}
+                                            onBlur={() => this.setState({ tagsColor: mainColor, tagsText: '#fff' })}
+                                            autoCorrect={false}
+                                            tagStyle={styles.tag}
+                                            tagTextStyle={styles.tagText}
+                                            keysForTag={', '}
+                                        />
                                     </FormGroup>
                                 </View>
                             </View>
-                            <View style={{...Styles.row, justifyContent: 'flex-end', marginRight: 15, marginTop: 3}}>
-                                <Button onPress={this.onPressSubmit} style={styles.button} containerStyle={styles.buttonInner}>
+                            {!(this.state.variantOptions.length >= 3) && <View style={{...Styles.row, justifyContent: 'flex-end', marginRight: 15, marginTop: 3}}>
+                                <Button onPress={() => this.addVariantOptions()} style={styles.button} containerStyle={styles.buttonInner}>
                                     <Button.Text style={styles.btnText}>Add More {icons.plus}</Button.Text>
                                 </Button>
-                            </View>
+                            </View>}
+                            <Text>{JSON.stringify(this.state.variantOptions)}</Text>
                         </VariantPricingWrapper>
                     )}
                 </AnimScrollView>
@@ -262,7 +307,11 @@ const PickerWrapper = styled.View`
     border: 1px solid ${COLORS.primary};
     background-color: ${COLORS.white};
 `;
-
+const PTagInput = styled(TagInput)`
+    width: 100%;
+    border: 1px solid ${COLORS.primary};
+    border-radius: 4px;
+`;
 const styles = StyleSheet.create({
     formGroupStyle: {
         width: '95%',
@@ -276,5 +325,24 @@ const styles = StyleSheet.create({
     btnText: {
         textTransform: 'capitalize',
         fontFamily: 'Montserrat-Bold',
+    },
+    tag: {
+        backgroundColor: '#fff',
+        borderWidth: 1,
+        borderColor: COLORS.primary,
+        padding: 2,
+    },
+    tagText: {
+        color: COLORS.black,
+    },
+    formGroupStyle: {
+        width: '100%',
+        paddingVertical: 0,
+        paddingHorizontal: 0,
+    },
+    tagInputContainerStyle: {
+        width: '100%',
+        margin: 0,
+        paddingHorizontal: 0,
     },
 });

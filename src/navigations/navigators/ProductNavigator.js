@@ -11,6 +11,7 @@ import ProductSettings from '@screens/user/products/create/ProductSettings';
 import Branding from '@screens/user/products/create/Branding';
 import Shipping from '@screens/user/products/create/Shipping';
 import Seo from '@screens/user/products/create/Seo';
+import { useSelector } from 'react-redux'
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -102,6 +103,7 @@ const MyTabBar = ({state, descriptors, navigation}) => {
 };
 
 const ProductTabNavigator = () => {
+    const product = useSelector((state) => state.productReducer.product)
     return (
         <Tab.Navigator
             backBehavior={'initialRoute'}
@@ -123,8 +125,8 @@ const ProductTabNavigator = () => {
 
             <Tab.Screen name="PricingInventory" component={PricingInventory} />
 
-            <Tab.Screen name="PricingInventoryStepThree" component={PricingInventoryStepThree} />
-
+            {product.has_variant && <Tab.Screen name="PricingInventoryStepThree" component={PricingInventoryStepThree} />}
+            
             <Tab.Screen name="ProductSettings" component={ProductSettings} />
 
             <Tab.Screen name="Branding" component={Branding} />
