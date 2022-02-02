@@ -32,23 +32,48 @@ class CategoryCollection extends Component {
             tagsText: '#fff',
             isSwitchOn: false,
             categories: [],
-            open: false,
-            value: null,
-            catItems: [
-                {label: 'Apple', value: 'apple'},
-                {label: 'Banana', value: 'banana'}
-              ]
+            mainCategoryOpen: false,
+            mainCategoryValue: null,
+            categoryOpen: false,
+            categoryValue: null,
         };
+        this.setMainCategoryOpen = this.setMainCategoryOpen.bind(this);
+        this.setMainCategoryValue = this.setMainCategoryValue.bind(this);
+        this.setCategoryOpen = this.setCategoryOpen.bind(this);
+        this.setCategoryValue = this.setCategoryValue.bind(this);
+        this.setItems = this.setItems.bind(this);
     }
 
     componentDidMount() {
         APIKit.get('/api/categories')
             .then((response) => {
-                this.setState({ categories: response.data })
+                this.categoryTreeView(response.data);
             })
             .catch((error) => {
                 logError(error);
             });
+    }
+
+    categoryTreeView(categories) {
+        const allCategories = []
+        if (categories.length > 0) {
+            categories.forEach(parent => {
+                allCategories.push({label: parent.category_name, value: parent.id})
+                if (parent.nested.length > 0) {
+                    parent.nested.forEach(secondChild => {
+                        allCategories.push({label: secondChild.category_name, value: secondChild.id, parent: secondChild.parent_id})
+                        if (secondChild.nested.length > 0) {
+                            secondChild.nested.forEach(thirdChild => {
+                                allCategories.push({label: thirdChild.category_name, value: thirdChild.id, parent: thirdChild.parent_id})
+                            })
+                        }
+                    })
+                }
+            })
+        }
+        if (allCategories.length > 0) {
+            this.setState({ categories: allCategories })
+        }
     }
 
     updateTagState = (state) => {
@@ -59,43 +84,26 @@ class CategoryCollection extends Component {
 
     onToggleSwitch = () => this.setState({ isSwitchOn: !this.state.isSwitchOn });
 
-    setOpen(open) {
-        this.setState({
-        open
-        });
+    setMainCategoryOpen(mainCategoryOpen) {
+        this.setState({mainCategoryOpen});
     }
-    
-    setValue(callback) {
-        this.setState(state => ({
-        value: callback(state.value)
-        }));
-    }
-    
-    setItems(callback) {
-        this.setState(state => ({
-        items: callback(state.catItems)
-        }));
+    setCategoryOpen(categoryOpen) {
+        this.setState({categoryOpen});
     }
 
-    renderGuests(item) {
-        const guests = [];
-        guests.push(<Picker.Item key={item.id} label={item.category_name} value={item.id} />);
-        if (item.nested.length > 0) {
-            item.nested.forEach((schild, ks) => {
-                guests.push(<Picker.Item key={ks} label={'--'+schild.category_name} value={schild.id} />)
-                if (schild.nested.length > 0) {
-                    schild.nested.forEach((thirdchild, kt) => {
-                        guests.push(<Picker.Item key={kt} label={'----'+thirdchild.category_name} value={thirdchild.id} />)
-                    })
-                }
-        
-            })
-        }
-        return guests;
+    setMainCategoryValue(callback) {
+        this.setState(state => ({mainCategoryValue: callback(state.mainCategoryValue)}));
+    }
+    setCategoryValue(callback) {
+        this.setState(state => ({categoryValue: callback(state.categoryValue)}));
+    }
+
+    setItems(callback) {
+        this.setState(state => ({items: callback(state.categories)}));
     }
 
     render() {
-        const { spinner, open, value, items } = this.state;
+        const { spinner, mainCategoryOpen, mainCategoryValue, categoryOpen, categoryValue, categories } = this.state;
         return (
             <View style={Styles.container}>
                 <Header navigation={this.props.navigation} title="Add New Product" showBack={true} />
@@ -104,39 +112,34 @@ class CategoryCollection extends Component {
                     <Styles.PageHeader>Category & Collection</Styles.PageHeader>
                     <FormGroup style={styles.formGroupStyle}>
                         <FormGroup.Label style={Styles.formLabel}>Main Category</FormGroup.Label>
-                        <PickerWrapper>
-                            <Picker selectedValue={this.state.selectedLanguage} onValueChange={(itemValue, itemIndex) => this.setState({ selectedLanguage: itemValue })}>
-                                <Picker.Item label="Main Category" value="" />
-
-                                {this.state.categories.length > 0 && this.state.categories.map((item, keyTk) => (
-                                    this.renderGuests(item)
-                                ))}
-
-                            </Picker>
-                            {/* {this.state.offices && this.state.offices.map((val, key) => (
-                                    <Picker.Item key={key} label={val.name} value={val.id} />
-
-                                    ))} */}
-
-
-                        </PickerWrapper>
                         <DropDownPicker
-                            open={open}
-                            value={value}
-                            items={items}
-                            setOpen={this.setOpen}
-                            setValue={this.setValue}
+                            open={mainCategoryOpen}
+                            value={mainCategoryValue}
+                            items={categories}
+                            setOpen={this.setMainCategoryOpen}
+                            setValue={this.setMainCategoryValue}
                             setItems={this.setItems}
+                            searchable={true}
+                            placeholder="Select an item"
+                            zIndex={3000}
+                            zIndexInverse={1000}
                         />
                     </FormGroup>
                     <FormGroup style={styles.formGroupStyle}>
                         <FormGroup.Label style={Styles.formLabel}>Categories</FormGroup.Label>
-                        <PickerWrapper>
-                            <Picker selectedValue={this.state.selectedLanguage} onValueChange={(itemValue, itemIndex) => this.setState({ selectedLanguage: itemValue })}>
-                                <Picker.Item label="Categories" value="" />
-                                <Picker.Item label="Inactive" value="inactive" />
-                            </Picker>
-                        </PickerWrapper>
+                        <DropDownPicker
+                            open={categoryOpen}
+                            value={categoryValue}
+                            items={categories}
+                            setOpen={this.setCategoryOpen}
+                            setValue={this.setCategoryValue}
+                            setItems={this.setItems}
+                            searchable={true}
+                            placeholder="Select an item"
+                            zIndex={2000}
+                            zIndexInverse={2000}
+                        />
+                        
                     </FormGroup>
                     <FormGroup style={styles.formGroupStyle}>
                         <FormGroup.Label style={Styles.formLabel}>Tags</FormGroup.Label>
@@ -189,8 +192,8 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps)(CategoryCollection);
-
-const AnimScrollView = styled(Animated.ScrollView)`
+//Animated.ScrollView
+const AnimScrollView = styled.View`
     flex: 1;
     padding-left: 10px;
     padding-right: 10px;
