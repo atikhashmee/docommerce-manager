@@ -45,8 +45,16 @@ const initialState ={
         store_id: null,
         admin_id: null,
         sequence_id: null,
-        other_categories: [],
+        other_categories: [],   //custom fields started adding from here
         tags: [],
+        has_variant: false,
+        variants: [],
+        cost: null,
+        profit_amount: null,
+        sku: null,
+        initial_stock_qty: null,
+        warehouse_id: null,
+        barcode: null,
     }
 }
 

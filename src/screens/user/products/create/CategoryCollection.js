@@ -127,6 +127,7 @@ class CategoryCollection extends Component {
                             placeholder="Select an item"
                             zIndex={3000}
                             zIndexInverse={1000}
+                            listMode="SCROLLVIEW" 
                         />
                     </FormGroup>
                     <FormGroup style={styles.formGroupStyle}>
@@ -144,6 +145,7 @@ class CategoryCollection extends Component {
                             placeholder="Select an item"
                             zIndex={2000}
                             zIndexInverse={2000}
+                            listMode="SCROLLVIEW" 
                         />
                         
                     </FormGroup>
@@ -203,8 +205,8 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps, {handleProductObjProperty})(CategoryCollection);
-//Animated.ScrollView
-const AnimScrollView = styled.View`
+
+const AnimScrollView = styled(Animated.ScrollView)`
     flex: 1;
     padding-left: 10px;
     padding-right: 10px;

@@ -10,9 +10,10 @@ import styled from 'styled-components/native';
 import {COLORS, icons} from '@constants';
 import {Picker} from '@react-native-picker/picker';
 import Button from '@components/form/buttons/Button';
-import TagInput from 'react-native-tags-input';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import APIKit from '../../../../config/axios'
 import {Switch} from 'react-native-paper';
+import {handleProductObjProperty} from '@actions/productActions'
+import DropDownPicker from 'react-native-dropdown-picker';
 
 const mainColor = '#3ca897';
 
@@ -21,26 +22,60 @@ class PricingInventory extends Component {
         super(props);
         this.state = {
             spinner: false,
-            emails: '',
-            text: '',
-            tags: {
-                tag: '',
-                tagsArray: [],
-            },
-            isSwitchOn: false,
+            warehouses: [],
+            
+            warehouseOpen: false,
+            warehouseValue: null,
+            warehouseLoading: false,
         };
+
+        this.setwarehouseOpen = this.setwarehouseOpen.bind(this);
+        this.setwarehouseValue = this.setwarehouseValue.bind(this);
+        this.setItems = this.setItems.bind(this);
     }
 
-    updateTagState = (state) => {
-        this.setState({
-            tags: state,
+    componentDidMount() {
+        APIKit.get('/api/warehouses')
+        .then((response) => {
+            let warehosueData  = response.data
+            let warehouseList = []
+            if (warehosueData.length > 0) {
+                warehosueData.forEach(item => {
+                    warehouseList.push({label: item.warehouse_id, value: item.id})
+                })
+            }
+            if (warehouseList.length > 0) {
+                this.setState({ warehouses: warehouseList})
+            }
+         
+        })
+        .catch((error) => {
+            logError(error);
         });
-    };
+    }
 
-    onToggleSwitch = () => this.setState({isSwitchOn: !this.state.isSwitchOn});
+    handleInputField(evt, key) {
+        this.props.handleProductObjProperty(evt, key);
+    }
+
+    setwarehouseOpen(warehouseOpen) {
+        this.setState({warehouseOpen});
+    }
+
+    setwarehouseValue(callback) {
+        this.setState(state => ({warehouseValue: callback(state.warehouseValue)}),
+        () => { this.props.handleProductObjProperty(this.state.warehouseValue, 'warehouse_id')}
+        );
+    }
+
+    setItems(callback) {
+        this.setState(state => ({items: callback(state.warehouses)}));
+    }
+
 
     render() {
-        const {spinner} = this.state;
+        const {spinner, warehouses, warehouseOpen, warehouseValue} = this.state;
+        const {product} = this.props;
         return (
             <View style={Styles.container}>
                 <Header navigation={this.props.navigation} title="Add New Product" showBack={true} />
@@ -51,19 +86,21 @@ class PricingInventory extends Component {
                         <FormGroup.Label style={Styles.formLabel}>This products has multiple options, like different sizes or color</FormGroup.Label>
                         <SwitchWrapper>
                             <SwithText>No</SwithText>
-                            <CustomeSwitch value={this.state.isSwitchOn} onValueChange={this.onToggleSwitch} />
+                            <CustomeSwitch value={product.has_variant} onValueChange={(evt) => {
+                               this.props.handleProductObjProperty(evt, 'has_variant')
+                            }} />
                             <SwithText>Yes</SwithText>
                         </SwitchWrapper>
                     </FormGroup>
-                    {!this.state.isSwitchOn && (
+                    {!product.has_variant && (
                         <VariantPricingWrapper>
                             <BlockName>Price</BlockName>
                             <View style={Styles.row}>
                                 <View style={Styles.col6}>
                                     <FormGroup style={styles.formGroupStyle}>
-                                        <FormGroup.Label style={Styles.formLabel}>Previous Price</FormGroup.Label>
+                                        <FormGroup.Label style={Styles.formLabel}>Previous Price {product.old_price}</FormGroup.Label>
                                         <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                            <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                            <FormGroup.TextInput  keyboardType="number-pad" onChangeText={(val) => this.handleInputField(val, 'old_price')} />
                                         </FormGroup.InputGroup>
                                     </FormGroup>
                                 </View>
@@ -71,7 +108,7 @@ class PricingInventory extends Component {
                                     <FormGroup style={styles.formGroupStyle}>
                                         <FormGroup.Label style={Styles.formLabel}>Selling Price</FormGroup.Label>
                                         <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                            <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                            <FormGroup.TextInput  keyboardType="number-pad" onChangeText={(val) => this.handleInputField(val, 'price')} />
                                         </FormGroup.InputGroup>
                                     </FormGroup>
                                 </View>
@@ -79,7 +116,7 @@ class PricingInventory extends Component {
                                     <FormGroup style={styles.formGroupStyle}>
                                         <FormGroup.Label style={Styles.formLabel}>Product Cost</FormGroup.Label>
                                         <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                            <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                            <FormGroup.TextInput  keyboardType="number-pad" onChangeText={(val) => this.handleInputField(val, 'cost')} />
                                         </FormGroup.InputGroup>
                                     </FormGroup>
                                 </View>
@@ -87,7 +124,7 @@ class PricingInventory extends Component {
                                     <FormGroup style={styles.formGroupStyle}>
                                         <FormGroup.Label style={Styles.formLabel}>Profit Amount</FormGroup.Label>
                                         <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                            <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                            <FormGroup.TextInput  keyboardType="number-pad" onChangeText={(val) => this.handleInputField(val, 'profit_amount')} />
                                         </FormGroup.InputGroup>
                                     </FormGroup>
                                 </View>
@@ -98,7 +135,7 @@ class PricingInventory extends Component {
                                     <FormGroup style={styles.formGroupStyle}>
                                         <FormGroup.Label style={Styles.formLabel}>Initial Stock Quantity</FormGroup.Label>
                                         <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                            <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                            <FormGroup.TextInput  keyboardType="number-pad" onChangeText={(val) => this.handleInputField(val, 'initial_stock_qty')} />
                                         </FormGroup.InputGroup>
                                     </FormGroup>
                                 </View>
@@ -106,23 +143,31 @@ class PricingInventory extends Component {
                                     <FormGroup style={styles.formGroupStyle}>
                                         <FormGroup.Label style={Styles.formLabel}>SKU</FormGroup.Label>
                                         <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                            <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                            <FormGroup.TextInput onChangeText={(val) => this.handleInputField(val, 'sku')} />
                                         </FormGroup.InputGroup>
                                     </FormGroup>
                                 </View>
                                 <View style={Styles.col6}>
-                                    <FormGroup style={styles.formGroupStyle}>
-                                        <FormGroup.Label style={Styles.formLabel}>Warehouse</FormGroup.Label>
-                                        <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                            <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
-                                        </FormGroup.InputGroup>
-                                    </FormGroup>
+                                <FormGroup style={styles.formGroupStyle}>
+                                    <FormGroup.Label style={Styles.formLabel}>Warehouse</FormGroup.Label>
+                                    <DropDownPicker
+                                        open={warehouseOpen}
+                                        value={warehouseValue}
+                                        items={warehouses}
+                                        setOpen={this.setwarehouseOpen}
+                                        setValue={this.setwarehouseValue}
+                                        setItems={this.setItems}
+                                        searchable={true}
+                                        placeholder="Select an item"
+                                        listMode="SCROLLVIEW" 
+                                    />
+                                </FormGroup>
                                 </View>
                                 <View style={Styles.col6}>
                                     <FormGroup style={styles.formGroupStyle}>
                                         <FormGroup.Label style={Styles.formLabel}>Barcode</FormGroup.Label>
                                         <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                            <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                            <FormGroup.TextInput onChangeText={(val) => this.handleInputField(val, 'barcode')} />
                                         </FormGroup.InputGroup>
                                     </FormGroup>
                                 </View>
@@ -130,7 +175,7 @@ class PricingInventory extends Component {
                         </VariantPricingWrapper>
                     )}
 
-                    {this.state.isSwitchOn && (
+                    {product.has_variant && (
                         <VariantPricingWrapper>
                             <View style={Styles.row}>
                                 <View style={Styles.col12}>
@@ -173,10 +218,11 @@ const mapStateToProps = (state) => {
     return {
         token: state.userReducer && state.userReducer.token,
         authUser: state.userReducer && state.userReducer.authUser,
+        product: state.productReducer && state.productReducer.product,
     };
 };
 
-export default connect(mapStateToProps)(PricingInventory);
+export default connect(mapStateToProps, {handleProductObjProperty})(PricingInventory);
 
 const AnimScrollView = styled(Animated.ScrollView)`
     flex: 1;
