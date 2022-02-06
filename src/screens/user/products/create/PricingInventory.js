@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View, StyleSheet, Dimensions} from 'react-native';
+import {Text, View, StyleSheet, Dimensions, Pressable} from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Animated from 'react-native-reanimated';
 import {connect} from 'react-redux';
@@ -11,7 +11,7 @@ import {COLORS, icons} from '@constants';
 import {Picker} from '@react-native-picker/picker';
 import Button from '@components/form/buttons/Button';
 import APIKit from '../../../../config/axios'
-import {Switch} from 'react-native-paper';
+import {Switch, List} from 'react-native-paper';
 import {handleProductObjProperty} from '@actions/productActions'
 import DropDownPicker from 'react-native-dropdown-picker';
 import TagInput from 'react-native-tags-input';
@@ -87,16 +87,72 @@ class PricingInventory extends Component {
         this.setState({tags: state});
     };
 
+    cartesian(...a) {
+        return a.reduce((a, b) => a.flatMap(d => b.map(e => [d, e].flat())));
+    }
+
     addVariantOptions() {
         let var_options = [...this.state.variantOptions];
-        if (this.state.selectedVariantOption !==null && this.state.tags.tagsArray.length > 0) {
-            var_options.push({option: this.state.selectedVariantOption, value: [...this.state.tags.tagsArray]})
+        if (this.state.selectedVariantOption !==null && this.state.tags.tagsArray.length > 0 && var_options.length < 4) {
+            //check for duplicate entry
+            let optionExist = var_options.some(item => item.option == this.state.selectedVariantOption)
+            if (optionExist) {
+                var_options = var_options.map(item => {
+                    if (item.option == this.state.selectedVariantOption) {
+                        let newValue = this.state.tags.tagsArray
+                        let oldValue = item.value
+                        let unique = [...new Set(newValue.concat(oldValue))];
+                        item.value = [...unique.sort()]
+                    }
+                    return item;
+                })
+            } else {
+                var_options.push({option: this.state.selectedVariantOption, value: [...this.state.tags.tagsArray]})
+            }
         }
-        this.setState({variantOptions: var_options});
+
+        this.setState({variantOptions: var_options}, () => this.makeVariant());
+        this.props.handleProductObjProperty(var_options, 'variant_options')
         this.setState({tags: {
             tag: '',
             tagsArray: [],
-        }});
+        }, selectedVariantOption: null});
+    }
+
+    makeVariant() {
+        let variants;
+        let product_variants = [];
+        let options = this.props.product.variant_options;
+        if (options.length === 1) {
+            variants = this.cartesian(options[0].value);
+        } else if (options.length === 2) {
+            variants = this.cartesian(options[0].value, options[1].value);
+        } else {
+            variants = this.cartesian(options[0].value, options[1].value, options[2].value);
+        }
+        variants.forEach(function (value, index, array) {
+            product_variants.push({
+                warehouse_id: '',
+                name: value instanceof Array ? value.join('/') : value,
+                opt1_value: value instanceof Array ? value[0] : value,
+                opt2_value: options.length === 2 ? value[1] : '',
+                opt3_value: options.length === 3 ? value[2] : '',
+                price: '',
+                old_price: '',
+                product_cost: '',
+                quantity: '',
+                sku: '',
+                barcode: '',
+                profit_amount: '',
+            });
+        });
+        this.props.handleProductObjProperty(product_variants, 'variants')
+    }
+    
+    removeVariantOption(option) {
+        let variant_options = [...this.props.product.variant_options]
+        let removedOption = variant_options.filter(item => item.option != option) 
+        this.props.handleProductObjProperty(removedOption, 'variant_options')
     }
 
     render() {
@@ -245,12 +301,23 @@ class PricingInventory extends Component {
                                     </FormGroup>
                                 </View>
                             </View>
-                            {!(this.state.variantOptions.length >= 3) && <View style={{...Styles.row, justifyContent: 'flex-end', marginRight: 15, marginTop: 3}}>
+                            {!(product.variant_options.length >= 3) && <View style={{...Styles.row, justifyContent: 'flex-end', marginRight: 15, marginTop: 3}}>
                                 <Button onPress={() => this.addVariantOptions()} style={styles.button} containerStyle={styles.buttonInner}>
                                     <Button.Text style={styles.btnText}>Add More {icons.plus}</Button.Text>
                                 </Button>
                             </View>}
-                            <Text>{JSON.stringify(this.state.variantOptions)}</Text>
+                            <View style={Styles.row}>
+                                <View style={Styles.col12}>
+                                <List.Section>
+                                    <List.Subheader>Options Added</List.Subheader>
+                                    {product.variant_options.length > 0 && product.variant_options.map((item, optionKey) => ( <List.Item style={{paddingVertical: 0, marginBottom: 10, backgroundColor: COLORS.white}} key={optionKey} title={<View>
+                                        <ListItemHeader>{item.option}</ListItemHeader>
+                                        <SwitchWrapper>{item.value.length > 0 && item.value.map((sItem, skey) => (<ListItemSubItems key={skey}>{sItem}</ListItemSubItems>))}</SwitchWrapper>
+                                    </View>} right={() => <Pressable onPress={()=> this.removeVariantOption(item.option)}><List.Icon  color={COLORS.red} icon="delete" /></Pressable> } />))}
+                                    {product.variant_options.length == 0 && (<Styles.PageHeader>No Items Added</Styles.PageHeader>)}
+                                </List.Section>
+                                </View>
+                            </View>
                         </VariantPricingWrapper>
                     )}
                 </AnimScrollView>
@@ -302,6 +369,14 @@ const BlockName = styled.Text`
     margin-top: 3px;
     margin-bottom: 3px;
     padding-left: 3px;
+`;
+const ListItemHeader = styled(BlockName)`
+    font-weight: bold;
+`;
+const ListItemSubItems = styled(BlockName)`
+    border: 1px solid #d3d3d3;
+    padding: 5px;
+    margin-right: 3px;
 `;
 const PickerWrapper = styled.View`
     border: 1px solid ${COLORS.primary};

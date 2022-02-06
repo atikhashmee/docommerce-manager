@@ -55,6 +55,7 @@ const initialState ={
         initial_stock_qty: null,
         warehouse_id: null,
         barcode: null,
+        variant_options: [],
     }
 }
 

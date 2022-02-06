@@ -12,6 +12,7 @@ import {Picker} from '@react-native-picker/picker';
 import TagInput from 'react-native-tags-input';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Switch} from 'react-native-paper';
+import {handleProductObjProperty} from '@actions/productActions'
 
 const mainColor = '#3ca897';
 
@@ -21,162 +22,93 @@ class PricingInventoryStepThree extends Component {
         this.state = {
             spinner: false,
             isSwitchOn: false,
+            variants: []
         };
     }
+
     render() {
-        const {spinner} = this.state;
+        const {spinner, variants} = this.state;
+        const {product} = this.props;
+        
         return (
             <View style={Styles.container}>
                 <Header navigation={this.props.navigation} title="Add New Product" showBack={true} />
                 <Spinner visible={spinner} textContent={'Loading...'} />
                 <AnimScrollView>
-                    <Styles.PageHeader>Variant Pricing -- 3</Styles.PageHeader>
-                    <VariantPricingWrapper>
-                        <VariantHeading>XL</VariantHeading>
-                        <BlockName>Price</BlockName>
-                        <View style={Styles.row}>
-                            <View style={Styles.col6}>
-                                <FormGroup style={styles.formGroupStyle}>
-                                    <FormGroup.Label style={Styles.formLabel}>Previous Price</FormGroup.Label>
-                                    <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                        <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
-                                    </FormGroup.InputGroup>
-                                </FormGroup>
+                    <Styles.PageHeader>Variant Pricing</Styles.PageHeader>
+                    {product.variants.length > 0 && product.variants.map((item, itemKey) =>  (<VariantPricingWrapper key={itemKey}>
+                            <VariantHeading> {item.name}</VariantHeading>
+                            <BlockName>Price</BlockName>
+                            <View style={Styles.row}>
+                                <View style={Styles.col6}>
+                                    <FormGroup style={styles.formGroupStyle}>
+                                        <FormGroup.Label style={Styles.formLabel}>Previous Price</FormGroup.Label>
+                                        <FormGroup.InputGroup style={Styles.inputGroupStyle}>
+                                            <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                        </FormGroup.InputGroup>
+                                    </FormGroup>
+                                </View>
+                                <View style={Styles.col6}>
+                                    <FormGroup style={styles.formGroupStyle}>
+                                        <FormGroup.Label style={Styles.formLabel}>Selling Price</FormGroup.Label>
+                                        <FormGroup.InputGroup style={Styles.inputGroupStyle}>
+                                            <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                        </FormGroup.InputGroup>
+                                    </FormGroup>
+                                </View>
+                                <View style={Styles.col6}>
+                                    <FormGroup style={styles.formGroupStyle}>
+                                        <FormGroup.Label style={Styles.formLabel}>Product Cost</FormGroup.Label>
+                                        <FormGroup.InputGroup style={Styles.inputGroupStyle}>
+                                            <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                        </FormGroup.InputGroup>
+                                    </FormGroup>
+                                </View>
+                                <View style={Styles.col6}>
+                                    <FormGroup style={styles.formGroupStyle}>
+                                        <FormGroup.Label style={Styles.formLabel}>Profit Amount</FormGroup.Label>
+                                        <FormGroup.InputGroup style={Styles.inputGroupStyle}>
+                                            <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                        </FormGroup.InputGroup>
+                                    </FormGroup>
+                                </View>
                             </View>
-                            <View style={Styles.col6}>
-                                <FormGroup style={styles.formGroupStyle}>
-                                    <FormGroup.Label style={Styles.formLabel}>Selling Price</FormGroup.Label>
-                                    <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                        <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
-                                    </FormGroup.InputGroup>
-                                </FormGroup>
+                            <BlockName>Inventory</BlockName>
+                            <View style={Styles.row}>
+                                <View style={Styles.col6}>
+                                    <FormGroup style={styles.formGroupStyle}>
+                                        <FormGroup.Label style={Styles.formLabel}>Initial Stock Quantity</FormGroup.Label>
+                                        <FormGroup.InputGroup style={Styles.inputGroupStyle}>
+                                            <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                        </FormGroup.InputGroup>
+                                    </FormGroup>
+                                </View>
+                                <View style={Styles.col6}>
+                                    <FormGroup style={styles.formGroupStyle}>
+                                        <FormGroup.Label style={Styles.formLabel}>SKU</FormGroup.Label>
+                                        <FormGroup.InputGroup style={Styles.inputGroupStyle}>
+                                            <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                        </FormGroup.InputGroup>
+                                    </FormGroup>
+                                </View>
+                                <View style={Styles.col6}>
+                                    <FormGroup style={styles.formGroupStyle}>
+                                        <FormGroup.Label style={Styles.formLabel}>Warehouse</FormGroup.Label>
+                                        <FormGroup.InputGroup style={Styles.inputGroupStyle}>
+                                            <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                        </FormGroup.InputGroup>
+                                    </FormGroup>
+                                </View>
+                                <View style={Styles.col6}>
+                                    <FormGroup style={styles.formGroupStyle}>
+                                        <FormGroup.Label style={Styles.formLabel}>Barcode</FormGroup.Label>
+                                        <FormGroup.InputGroup style={Styles.inputGroupStyle}>
+                                            <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                        </FormGroup.InputGroup>
+                                    </FormGroup>
+                                </View>
                             </View>
-                            <View style={Styles.col6}>
-                                <FormGroup style={styles.formGroupStyle}>
-                                    <FormGroup.Label style={Styles.formLabel}>Product Cost</FormGroup.Label>
-                                    <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                        <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
-                                    </FormGroup.InputGroup>
-                                </FormGroup>
-                            </View>
-                            <View style={Styles.col6}>
-                                <FormGroup style={styles.formGroupStyle}>
-                                    <FormGroup.Label style={Styles.formLabel}>Profit Amount</FormGroup.Label>
-                                    <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                        <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
-                                    </FormGroup.InputGroup>
-                                </FormGroup>
-                            </View>
-                        </View>
-                        <BlockName>Inventory</BlockName>
-                        <View style={Styles.row}>
-                            <View style={Styles.col6}>
-                                <FormGroup style={styles.formGroupStyle}>
-                                    <FormGroup.Label style={Styles.formLabel}>Initial Stock Quantity</FormGroup.Label>
-                                    <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                        <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
-                                    </FormGroup.InputGroup>
-                                </FormGroup>
-                            </View>
-                            <View style={Styles.col6}>
-                                <FormGroup style={styles.formGroupStyle}>
-                                    <FormGroup.Label style={Styles.formLabel}>SKU</FormGroup.Label>
-                                    <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                        <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
-                                    </FormGroup.InputGroup>
-                                </FormGroup>
-                            </View>
-                            <View style={Styles.col6}>
-                                <FormGroup style={styles.formGroupStyle}>
-                                    <FormGroup.Label style={Styles.formLabel}>Warehouse</FormGroup.Label>
-                                    <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                        <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
-                                    </FormGroup.InputGroup>
-                                </FormGroup>
-                            </View>
-                            <View style={Styles.col6}>
-                                <FormGroup style={styles.formGroupStyle}>
-                                    <FormGroup.Label style={Styles.formLabel}>Barcode</FormGroup.Label>
-                                    <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                        <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
-                                    </FormGroup.InputGroup>
-                                </FormGroup>
-                            </View>
-                        </View>
-                    </VariantPricingWrapper>
-                    <VariantPricingWrapper>
-                        <VariantHeading>SM</VariantHeading>
-                        <BlockName>Price</BlockName>
-                        <View style={Styles.row}>
-                            <View style={Styles.col6}>
-                                <FormGroup style={styles.formGroupStyle}>
-                                    <FormGroup.Label style={Styles.formLabel}>Previous Price</FormGroup.Label>
-                                    <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                        <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
-                                    </FormGroup.InputGroup>
-                                </FormGroup>
-                            </View>
-                            <View style={Styles.col6}>
-                                <FormGroup style={styles.formGroupStyle}>
-                                    <FormGroup.Label style={Styles.formLabel}>Selling Price</FormGroup.Label>
-                                    <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                        <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
-                                    </FormGroup.InputGroup>
-                                </FormGroup>
-                            </View>
-                            <View style={Styles.col6}>
-                                <FormGroup style={styles.formGroupStyle}>
-                                    <FormGroup.Label style={Styles.formLabel}>Product Cost</FormGroup.Label>
-                                    <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                        <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
-                                    </FormGroup.InputGroup>
-                                </FormGroup>
-                            </View>
-                            <View style={Styles.col6}>
-                                <FormGroup style={styles.formGroupStyle}>
-                                    <FormGroup.Label style={Styles.formLabel}>Profit Amount</FormGroup.Label>
-                                    <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                        <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
-                                    </FormGroup.InputGroup>
-                                </FormGroup>
-                            </View>
-                        </View>
-                        <BlockName>Inventory</BlockName>
-                        <View style={Styles.row}>
-                            <View style={Styles.col6}>
-                                <FormGroup style={styles.formGroupStyle}>
-                                    <FormGroup.Label style={Styles.formLabel}>Initial Stock Quantity</FormGroup.Label>
-                                    <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                        <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
-                                    </FormGroup.InputGroup>
-                                </FormGroup>
-                            </View>
-                            <View style={Styles.col6}>
-                                <FormGroup style={styles.formGroupStyle}>
-                                    <FormGroup.Label style={Styles.formLabel}>SKU</FormGroup.Label>
-                                    <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                        <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
-                                    </FormGroup.InputGroup>
-                                </FormGroup>
-                            </View>
-                            <View style={Styles.col6}>
-                                <FormGroup style={styles.formGroupStyle}>
-                                    <FormGroup.Label style={Styles.formLabel}>Warehouse</FormGroup.Label>
-                                    <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                        <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
-                                    </FormGroup.InputGroup>
-                                </FormGroup>
-                            </View>
-                            <View style={Styles.col6}>
-                                <FormGroup style={styles.formGroupStyle}>
-                                    <FormGroup.Label style={Styles.formLabel}>Barcode</FormGroup.Label>
-                                    <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                        <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
-                                    </FormGroup.InputGroup>
-                                </FormGroup>
-                            </View>
-                        </View>
-                    </VariantPricingWrapper>
+                        </VariantPricingWrapper>))}
                 </AnimScrollView>
             </View>
         );
@@ -187,6 +119,7 @@ const mapStateToProps = (state) => {
     return {
         token: state.userReducer && state.userReducer.token,
         authUser: state.userReducer && state.userReducer.authUser,
+        product: state.productReducer && state.productReducer.product,
     };
 };
 
