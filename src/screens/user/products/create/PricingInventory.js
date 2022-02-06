@@ -92,7 +92,7 @@ class PricingInventory extends Component {
     }
 
     addVariantOptions() {
-        let var_options = [...this.state.variantOptions];
+        let var_options = [...this.props.product.variant_options];
         if (this.state.selectedVariantOption !==null && this.state.tags.tagsArray.length > 0 && var_options.length < 4) {
             //check for duplicate entry
             let optionExist = var_options.some(item => item.option == this.state.selectedVariantOption)
@@ -110,28 +110,28 @@ class PricingInventory extends Component {
                 var_options.push({option: this.state.selectedVariantOption, value: [...this.state.tags.tagsArray]})
             }
         }
-
-        this.setState({variantOptions: var_options}, () => this.makeVariant());
         this.props.handleProductObjProperty(var_options, 'variant_options')
+        this.props.handleProductObjProperty(this.makeVariant(var_options), 'variants')
+
         this.setState({tags: {
             tag: '',
             tagsArray: [],
         }, selectedVariantOption: null});
     }
 
-    makeVariant() {
-        let variants;
+    makeVariant(options) {
+        let variants = [];
         let product_variants = [];
-        let options = this.props.product.variant_options;
         if (options.length === 1) {
             variants = this.cartesian(options[0].value);
         } else if (options.length === 2) {
             variants = this.cartesian(options[0].value, options[1].value);
-        } else {
+        } else if (options.length === 3) {
             variants = this.cartesian(options[0].value, options[1].value, options[2].value);
         }
         variants.forEach(function (value, index, array) {
             product_variants.push({
+                item_id: index,
                 warehouse_id: '',
                 name: value instanceof Array ? value.join('/') : value,
                 opt1_value: value instanceof Array ? value[0] : value,
@@ -146,13 +146,30 @@ class PricingInventory extends Component {
                 profit_amount: '',
             });
         });
-        this.props.handleProductObjProperty(product_variants, 'variants')
+        return product_variants;
     }
     
     removeVariantOption(option) {
         let variant_options = [...this.props.product.variant_options]
         let removedOption = variant_options.filter(item => item.option != option) 
         this.props.handleProductObjProperty(removedOption, 'variant_options')
+        this.props.handleProductObjProperty(this.makeVariant(removedOption), 'variants')
+    }
+
+    variantEnableToggole(isEnable) {
+        if (isEnable) {
+            this.props.handleProductObjProperty([], 'variant_options')
+            this.props.handleProductObjProperty([], 'variants')
+        } else {
+            this.props.handleProductObjProperty(null, 'old_price')
+            this.props.handleProductObjProperty(null, 'price')
+            this.props.handleProductObjProperty(null, 'cost')
+            this.props.handleProductObjProperty(null, 'profit_amount')
+            this.props.handleProductObjProperty(null, 'initial_stock_qty')
+            this.props.handleProductObjProperty(null, 'sku')
+            this.props.handleProductObjProperty(null, 'warehouse_id')
+        }
+        this.props.handleProductObjProperty(isEnable, 'has_variant')
     }
 
     render() {
@@ -168,9 +185,7 @@ class PricingInventory extends Component {
                         <FormGroup.Label style={Styles.formLabel}>This products has multiple options, like different sizes or color</FormGroup.Label>
                         <SwitchWrapper>
                             <SwithText>No</SwithText>
-                            <CustomeSwitch value={product.has_variant} onValueChange={(evt) => {
-                               this.props.handleProductObjProperty(evt, 'has_variant')
-                            }} />
+                            <CustomeSwitch value={product.has_variant} onValueChange={(evt) => {this.variantEnableToggole(evt)}} />
                             <SwithText>Yes</SwithText>
                         </SwitchWrapper>
                     </FormGroup>

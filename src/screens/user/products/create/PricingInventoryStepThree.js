@@ -26,6 +26,27 @@ class PricingInventoryStepThree extends Component {
         };
     }
 
+    componentDidMount() {
+
+    }
+
+    componentDidUpdate(prevState) {
+       // console.log(prevState, '==========');
+    }
+
+    handleDynamicInputFieldObj(val, key, item_id) {
+        let variantsData = JSON.parse(JSON.stringify(this.props.product.variants))
+        if (variantsData.length > 0) {
+            variantsData = variantsData.map(item => {
+                if (item.item_id === item_id) {
+                    item[key] = val;
+                }
+                return item;
+            })
+        }
+        this.props.handleProductObjProperty(variantsData, 'variants')
+    }
+
     render() {
         const {spinner, variants} = this.state;
         const {product} = this.props;
@@ -44,7 +65,7 @@ class PricingInventoryStepThree extends Component {
                                     <FormGroup style={styles.formGroupStyle}>
                                         <FormGroup.Label style={Styles.formLabel}>Previous Price</FormGroup.Label>
                                         <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                            <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                            <FormGroup.TextInput onChangeText={(val) => this.handleDynamicInputFieldObj(val, 'old_price', item.item_id)} value={item.old_price} />
                                         </FormGroup.InputGroup>
                                     </FormGroup>
                                 </View>
@@ -52,7 +73,7 @@ class PricingInventoryStepThree extends Component {
                                     <FormGroup style={styles.formGroupStyle}>
                                         <FormGroup.Label style={Styles.formLabel}>Selling Price</FormGroup.Label>
                                         <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                            <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                            <FormGroup.TextInput onChangeText={(val) => this.handleDynamicInputFieldObj(val, 'price', item.item_id)}  value={item.price} />
                                         </FormGroup.InputGroup>
                                     </FormGroup>
                                 </View>
@@ -60,7 +81,7 @@ class PricingInventoryStepThree extends Component {
                                     <FormGroup style={styles.formGroupStyle}>
                                         <FormGroup.Label style={Styles.formLabel}>Product Cost</FormGroup.Label>
                                         <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                            <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                            <FormGroup.TextInput onChangeText={(val) => this.handleDynamicInputFieldObj(val, 'product_cost', item.item_id)}  value={item.product_cost} />
                                         </FormGroup.InputGroup>
                                     </FormGroup>
                                 </View>
@@ -68,7 +89,7 @@ class PricingInventoryStepThree extends Component {
                                     <FormGroup style={styles.formGroupStyle}>
                                         <FormGroup.Label style={Styles.formLabel}>Profit Amount</FormGroup.Label>
                                         <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                            <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                            <FormGroup.TextInput onChangeText={(val) => this.handleDynamicInputFieldObj(val, 'profit_amount', item.item_id)} value={item.profit_amount} />
                                         </FormGroup.InputGroup>
                                     </FormGroup>
                                 </View>
@@ -79,7 +100,7 @@ class PricingInventoryStepThree extends Component {
                                     <FormGroup style={styles.formGroupStyle}>
                                         <FormGroup.Label style={Styles.formLabel}>Initial Stock Quantity</FormGroup.Label>
                                         <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                            <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                            <FormGroup.TextInput onChangeText={(val) => this.handleDynamicInputFieldObj(val, 'quantity', item.item_id)}  value={item.quantity}  />
                                         </FormGroup.InputGroup>
                                     </FormGroup>
                                 </View>
@@ -87,7 +108,7 @@ class PricingInventoryStepThree extends Component {
                                     <FormGroup style={styles.formGroupStyle}>
                                         <FormGroup.Label style={Styles.formLabel}>SKU</FormGroup.Label>
                                         <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                            <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                            <FormGroup.TextInput onChangeText={(val) => this.handleDynamicInputFieldObj(val, 'sku', item.item_id)} value={item.sku} />
                                         </FormGroup.InputGroup>
                                     </FormGroup>
                                 </View>
@@ -95,7 +116,7 @@ class PricingInventoryStepThree extends Component {
                                     <FormGroup style={styles.formGroupStyle}>
                                         <FormGroup.Label style={Styles.formLabel}>Warehouse</FormGroup.Label>
                                         <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                            <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                            <FormGroup.TextInput onChangeText={(val) => this.handleDynamicInputFieldObj(val, 'warehouse_id', item.item_id)} value={item.warehouse_id}  />
                                         </FormGroup.InputGroup>
                                     </FormGroup>
                                 </View>
@@ -103,7 +124,7 @@ class PricingInventoryStepThree extends Component {
                                     <FormGroup style={styles.formGroupStyle}>
                                         <FormGroup.Label style={Styles.formLabel}>Barcode</FormGroup.Label>
                                         <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                            <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                            <FormGroup.TextInput onChangeText={(val) => this.handleDynamicInputFieldObj(val, 'barcode', item.item_id)} value={item.barcode} />
                                         </FormGroup.InputGroup>
                                     </FormGroup>
                                 </View>
@@ -123,7 +144,7 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default connect(mapStateToProps)(PricingInventoryStepThree);
+export default connect(mapStateToProps, {handleProductObjProperty})(PricingInventoryStepThree);
 
 const AnimScrollView = styled(Animated.ScrollView)`
     flex: 1;
