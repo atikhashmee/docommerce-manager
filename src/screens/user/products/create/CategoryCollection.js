@@ -91,6 +91,7 @@ class CategoryCollection extends Component {
     }
 
     setMainCategoryValue(callback) {
+        console.log(callback);
         this.setState(state => ({mainCategoryValue: callback(state.mainCategoryValue)}), 
         () => { this.props.handleProductObjProperty(this.state.mainCategoryValue, 'category_id')});
     }

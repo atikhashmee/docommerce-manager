@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View, StyleSheet, Dimensions} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Animated from 'react-native-reanimated';
 import {connect} from 'react-redux';
@@ -8,13 +8,9 @@ import Styles from '@styles';
 import Header from './Header';
 import styled from 'styled-components/native';
 import {COLORS} from '@constants';
-import {Picker} from '@react-native-picker/picker';
-import TagInput from 'react-native-tags-input';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {Switch} from 'react-native-paper';
 import {handleProductObjProperty} from '@actions/productActions'
-
-const mainColor = '#3ca897';
+import APIKit from '../../../../config/axios'
+import DropDownPicker from 'react-native-dropdown-picker';
 
 class PricingInventoryStepThree extends Component {
     constructor(props) {
@@ -22,33 +18,66 @@ class PricingInventoryStepThree extends Component {
         this.state = {
             spinner: false,
             isSwitchOn: false,
-            variants: []
+            variants: [],
+            warehouses: [],
+            warehouseOpen: false,
+            warehouseValue: null,
         };
+        this.setItems = this.setItems.bind(this);
     }
 
     componentDidMount() {
+        APIKit.get('/api/warehouses')
+        .then((response) => {
+            let warehosueData  = response.data
+            let warehouseList = []
+            if (warehosueData.length > 0) {
+                warehosueData.forEach(item => {
+                    warehouseList.push({label: item.warehouse_id, value: item.id})
+                })
+            }
+            if (warehouseList.length > 0) {
+                this.setState({ warehouses: warehouseList})
+            }
+         
+        })
+        .catch((error) => {
+            logError(error);
+        });
 
+        //add dropdownpickeropen attribute on the fly
+        if (this.props.product.variants.length > 0) {
+            this.props.product.variants = this.props.product.variants.map(item => {
+                item.dropdownPickerOpen = false;
+                return item;
+            })
+        }
     }
 
-    componentDidUpdate(prevState) {
-       // console.log(prevState, '==========');
+    componentDidUpdate() {
+        //console.log(this.props.product.variants, '-------');
     }
 
     handleDynamicInputFieldObj(val, key, item_id) {
-        let variantsData = JSON.parse(JSON.stringify(this.props.product.variants))
+        let variantsData = [...this.props.product.variants]
         if (variantsData.length > 0) {
             variantsData = variantsData.map(item => {
                 if (item.item_id === item_id) {
                     item[key] = val;
                 }
+                console.log(item, 'asdddd');
                 return item;
             })
         }
         this.props.handleProductObjProperty(variantsData, 'variants')
     }
 
+    setItems(callback) {
+        this.setState(state => ({items: callback(state.warehouses)}));
+    }
+
     render() {
-        const {spinner, variants} = this.state;
+        const {spinner, warehouses, warehouseOpen, warehouseValue} = this.state;
         const {product} = this.props;
         
         return (
@@ -115,9 +144,22 @@ class PricingInventoryStepThree extends Component {
                                 <View style={Styles.col6}>
                                     <FormGroup style={styles.formGroupStyle}>
                                         <FormGroup.Label style={Styles.formLabel}>Warehouse</FormGroup.Label>
-                                        <FormGroup.InputGroup style={Styles.inputGroupStyle}>
+                                        {/* <FormGroup.InputGroup style={Styles.inputGroupStyle}>
                                             <FormGroup.TextInput onChangeText={(val) => this.handleDynamicInputFieldObj(val, 'warehouse_id', item.item_id)} value={item.warehouse_id}  />
-                                        </FormGroup.InputGroup>
+                                        </FormGroup.InputGroup> */}
+                                        <DropDownPicker
+                                            open={item.dropdownPickerOpen}
+                                            value={item.warehouse_id}
+                                            items={warehouses}
+                                            setOpen={(val) => {this.handleDynamicInputFieldObj(val, 'dropdownPickerOpen', item.item_id)}}
+                                            setValue={ (callback) => {this.handleDynamicInputFieldObj(callback(item.warehouse_id), 'warehouse_id', item.item_id)}}
+                                            setItems={this.setItems}
+                                            searchable={true}
+                                            placeholder="Select an item"
+                                            listMode="SCROLLVIEW" 
+                                            zIndex={4000}
+                                            zIndexInverse={4000}
+                                        />
                                     </FormGroup>
                                 </View>
                                 <View style={Styles.col6}>
