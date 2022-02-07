@@ -8,10 +8,8 @@ import Styles from '@styles';
 import Header from './Header';
 import styled from 'styled-components/native';
 import {COLORS} from '@constants';
-import {Picker} from '@react-native-picker/picker';
-import TagInput from 'react-native-tags-input';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Switch} from 'react-native-paper';
+import {handleProductObjProperty} from '@actions/productActions'
 
 const mainColor = '#3ca897';
 
@@ -20,26 +18,13 @@ class ProductSettings extends Component {
         super(props);
         this.state = {
             spinner: false,
-            emails: '',
-            text: '',
-            tags: {
-                tag: '',
-                tagsArray: [],
-            },
             isSwitchOn: false,
         };
     }
 
-    updateTagState = (state) => {
-        this.setState({
-            tags: state,
-        });
-    };
-
-    onToggleSwitch = () => this.setState({isSwitchOn: !this.state.isSwitchOn});
-
     render() {
         const {spinner} = this.state;
+        const {product} = this.props;
         return (
             <View style={Styles.container}>
                 <Header navigation={this.props.navigation} title="Add New Product" showBack={true} />
@@ -50,7 +35,7 @@ class ProductSettings extends Component {
                         <FormGroup.Label style={Styles.formLabel}>Tax Applicable</FormGroup.Label>
                         <SwitchWrapper>
                             <SwithText>ON</SwithText>
-                            <CustomeSwitch value={this.state.isSwitchOn} onValueChange={this.onToggleSwitch} />
+                            <CustomeSwitch value={product.tax} onValueChange={(evt) => {this.props.handleProductObjProperty(evt, 'tax')}} />
                             <SwithText>OFF</SwithText>
                         </SwitchWrapper>
                     </FormGroup>
@@ -58,7 +43,7 @@ class ProductSettings extends Component {
                         <FormGroup.Label style={Styles.formLabel}>Show product when out of stock</FormGroup.Label>
                         <SwitchWrapper>
                             <SwithText>ON</SwithText>
-                            <CustomeSwitch value={this.state.isSwitchOn} onValueChange={this.onToggleSwitch} />
+                            <CustomeSwitch value={product.show_product_when_of_stock} onValueChange={(evt) => {this.props.handleProductObjProperty(evt, 'show_product_when_of_stock')}} />
                             <SwithText>OFF</SwithText>
                         </SwitchWrapper>
                     </FormGroup>
@@ -66,7 +51,7 @@ class ProductSettings extends Component {
                         <FormGroup.Label style={Styles.formLabel}>Check stock during add to cart</FormGroup.Label>
                         <SwitchWrapper>
                             <SwithText>ON</SwithText>
-                            <CustomeSwitch value={this.state.isSwitchOn} onValueChange={this.onToggleSwitch} />
+                            <CustomeSwitch value={product.check_stock_during_add_to_cart} onValueChange={(evt) => {this.props.handleProductObjProperty(evt, 'check_stock_during_add_to_cart')}} />
                             <SwithText>OFF</SwithText>
                         </SwitchWrapper>
                     </FormGroup>
@@ -80,10 +65,11 @@ const mapStateToProps = (state) => {
     return {
         token: state.userReducer && state.userReducer.token,
         authUser: state.userReducer && state.userReducer.authUser,
+        product: state.productReducer && state.productReducer.product,
     };
 };
 
-export default connect(mapStateToProps)(ProductSettings);
+export default connect(mapStateToProps, {handleProductObjProperty})(ProductSettings);
 
 const AnimScrollView = styled(Animated.ScrollView)`
     flex: 1;

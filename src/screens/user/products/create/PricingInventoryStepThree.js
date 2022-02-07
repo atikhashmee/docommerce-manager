@@ -65,7 +65,6 @@ class PricingInventoryStepThree extends Component {
                 if (item.item_id === item_id) {
                     item[key] = val;
                 }
-                console.log(item, 'asdddd');
                 return item;
             })
         }
@@ -141,12 +140,9 @@ class PricingInventoryStepThree extends Component {
                                         </FormGroup.InputGroup>
                                     </FormGroup>
                                 </View>
-                                <View style={Styles.col6}>
+                                <View style={{...Styles.col6, zIndex: 1000*itemKey}}>
                                     <FormGroup style={styles.formGroupStyle}>
                                         <FormGroup.Label style={Styles.formLabel}>Warehouse</FormGroup.Label>
-                                        {/* <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                            <FormGroup.TextInput onChangeText={(val) => this.handleDynamicInputFieldObj(val, 'warehouse_id', item.item_id)} value={item.warehouse_id}  />
-                                        </FormGroup.InputGroup> */}
                                         <DropDownPicker
                                             open={item.dropdownPickerOpen}
                                             value={item.warehouse_id}
