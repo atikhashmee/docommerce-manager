@@ -221,6 +221,7 @@ class Branding extends Component {
                                 listMode="SCROLLVIEW" 
                                 zIndex={3000}
                                 zIndexInverse={4000}
+                                dropDownDirection="TOP"
                             />
                         </PickerWrapper>
                          
@@ -261,8 +262,6 @@ const AnimScrollView = styled(Animated.ScrollView)`
 
 const PickerWrapper = styled.View`
     margin-bottom: 5px;
-    position: relative;
-    z-index: 9999;
 `;
 
 const styles = StyleSheet.create({
