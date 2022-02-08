@@ -8,10 +8,9 @@ import Styles from '@styles';
 import Header from './Header';
 import styled from 'styled-components/native';
 import {COLORS} from '@constants';
-import {Picker} from '@react-native-picker/picker';
-import TagInput from 'react-native-tags-input';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Switch} from 'react-native-paper';
+import {handleProductObjProperty} from '@actions/productActions'
+import APIKit from '../../../../config/axios'
 
 const mainColor = '#3ca897';
 
@@ -20,14 +19,49 @@ class Shipping extends Component {
         super(props);
         this.state = {
             spinner: false,
-            isSwitchOn: false,
         };
     }
 
-    onToggleSwitch = () => this.setState({isSwitchOn: !this.state.isSwitchOn});
+    handleInputField(evt, key, chargeItem=null) {
+        if (chargeItem !== null) {
+            let shippingCharges = [...this.props.product.additional_charges_by_shipping];
+            shippingCharges = shippingCharges.map(item => {
+                if (chargeItem.id === item.id) {
+                    item.price_value = evt
+                }
+                return item;
+            })
+            this.props.handleProductObjProperty(shippingCharges, 'additional_charges_by_shipping');
+        } else {
+            this.props.handleProductObjProperty(evt, key);
+        }
+    }
+
+    componentDidMount() {
+        APIKit.get('/api/local-shippings')
+        .then((response) => {
+            let localShippingData = response.data, 
+            localShippings = []
+            
+            if (localShippingData.length > 0) {
+                localShippings = localShippingData.map(item => ({shipping_type: 'local', id: item.id, carrier_name: item.carrier.name, price_value: null}))
+                if (localShippings.length > 0) {
+                    this.props.handleProductObjProperty(localShippings, 'additional_charges_by_shipping');
+                }
+            }
+        })
+        .catch((error) => {
+            logError(error);
+        });
+    }
+
+    componentDidUpdate() {
+        //console.log(this.state.localShippings.length);
+    }
 
     render() {
-        const {spinner} = this.state;
+        const {spinner, localShippings} = this.state;
+        const {product} = this.props;
         return (
             <View style={Styles.container}>
                 <Header navigation={this.props.navigation} title="Add New Product" showBack={true} />
@@ -39,7 +73,7 @@ class Shipping extends Component {
                             <FormGroup style={styles.formGroupStyle}>
                                 <FormGroup.Label style={Styles.formLabel}>Weight</FormGroup.Label>
                                 <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                    <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                    <FormGroup.TextInput onChangeText={(val) => this.handleInputField(val, 'weight')} value={product.weight} />
                                 </FormGroup.InputGroup>
                             </FormGroup>
                         </View>
@@ -47,7 +81,7 @@ class Shipping extends Component {
                             <FormGroup style={styles.formGroupStyle}>
                                 <FormGroup.Label style={Styles.formLabel}>Package Length</FormGroup.Label>
                                 <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                    <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                    <FormGroup.TextInput onChangeText={(val) => this.handleInputField(val, 'length')} value={product.length} />
                                 </FormGroup.InputGroup>
                             </FormGroup>
                         </View>
@@ -55,7 +89,7 @@ class Shipping extends Component {
                             <FormGroup style={styles.formGroupStyle}>
                                 <FormGroup.Label style={Styles.formLabel}>Package Width</FormGroup.Label>
                                 <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                    <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                    <FormGroup.TextInput onChangeText={(val) => this.handleInputField(val, 'width')} value={product.width} />
                                 </FormGroup.InputGroup>
                             </FormGroup>
                         </View>
@@ -63,64 +97,60 @@ class Shipping extends Component {
                             <FormGroup style={styles.formGroupStyle}>
                                 <FormGroup.Label style={Styles.formLabel}>Package Height</FormGroup.Label>
                                 <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                    <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                                    <FormGroup.TextInput onChangeText={(val) => this.handleInputField(val, 'height')} value={product.height} />
                                 </FormGroup.InputGroup>
                             </FormGroup>
                         </View>
                     </View>
                     <FormGroup>
-                        <FormGroup.Label style={Styles.formLabel}>Show on New Arrival Collection</FormGroup.Label>
+                        <FormGroup.Label style={Styles.formLabel}>Local delivery</FormGroup.Label>
                         <SwitchWrapper>
                             <SwithText>No</SwithText>
-                            <CustomeSwitch value={this.state.isSwitchOn} onValueChange={this.onToggleSwitch} />
+                            <CustomeSwitch value={product.local_delivery} onValueChange={(evt) => this.handleInputField(evt, 'local_delivery')} />
                             <SwithText>Yes</SwithText>
                         </SwitchWrapper>
                     </FormGroup>
-                    <View style={Styles.row}>
-                        <View style={Styles.col6}>
-                            <FormGroup style={styles.formGroupStyle}>
-                                <FormGroup.Label style={Styles.formLabel}>Min Order Q.</FormGroup.Label>
-                                <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                    <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
-                                </FormGroup.InputGroup>
-                            </FormGroup>
+                    {product.local_delivery && (<>
+                        <View style={Styles.row}>
+                            <View style={Styles.col6}>
+                                <FormGroup style={styles.formGroupStyle}>
+                                    <FormGroup.Label style={Styles.formLabel}>Min Order Q.</FormGroup.Label>
+                                    <FormGroup.InputGroup style={Styles.inputGroupStyle}>
+                                        <FormGroup.TextInput onChangeText={(val) => this.handleInputField(val, 'local_min_order_qty')} value={product.local_min_order_qty} />
+                                    </FormGroup.InputGroup>
+                                </FormGroup>
+                            </View>
+                            <View style={Styles.col6}>
+                                <FormGroup style={styles.formGroupStyle}>
+                                    <FormGroup.Label style={Styles.formLabel}>Max Order Q.</FormGroup.Label>
+                                    <FormGroup.InputGroup style={Styles.inputGroupStyle}>
+                                        <FormGroup.TextInput onChangeText={(val) => this.handleInputField(val, 'local_max_order_qty')} value={product.local_max_order_qty} />
+                                    </FormGroup.InputGroup>
+                                </FormGroup>
+                            </View>
+                            <View style={Styles.col6}>
+                                <FormGroup>
+                                    <FormGroup.Label style={Styles.formLabel}>Delivery Quantity.</FormGroup.Label>
+                                    <FormGroup.InputGroup style={Styles.inputGroupStyle}>
+                                        <FormGroup.TextInput onChangeText={(val) => this.handleInputField(val, 'local_delivery_qty')} value={product.local_delivery_qty} />
+                                    </FormGroup.InputGroup>
+                                </FormGroup>
+                            </View>
                         </View>
-                        <View style={Styles.col6}>
-                            <FormGroup style={styles.formGroupStyle}>
-                                <FormGroup.Label style={Styles.formLabel}>Max Order Q.</FormGroup.Label>
-                                <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                    <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
-                                </FormGroup.InputGroup>
-                            </FormGroup>
+                        <Styles.PageHeader>Additional Shipping Charge</Styles.PageHeader>
+                        <View style={Styles.row}>
+                            {product.additional_charges_by_shipping.length > 0 && product.additional_charges_by_shipping.map((item, itemk) => (
+                            <View style={Styles.col6} key={itemk}>
+                                <FormGroup>
+                                    <FormGroup.Label style={Styles.formLabel}>{item.carrier_name}</FormGroup.Label>
+                                    <FormGroup.InputGroup style={Styles.inputGroupStyle}>
+                                        <FormGroup.TextInput onChangeText={(val) => this.handleInputField(val, 'additional_charges_by_shipping', item)} value={item.price_value} />
+                                    </FormGroup.InputGroup>
+                                </FormGroup>
+                            </View>))}
                         </View>
-                        <View style={Styles.col6}>
-                            <FormGroup>
-                                <FormGroup.Label style={Styles.formLabel}>Delivery Quantity.</FormGroup.Label>
-                                <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                    <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
-                                </FormGroup.InputGroup>
-                            </FormGroup>
-                        </View>
-                    </View>
-                    <Styles.PageHeader>Additional Shipping Charge</Styles.PageHeader>
-                    <View style={Styles.row}>
-                        <View style={Styles.col12}>
-                            <FormGroup>
-                                <FormGroup.Label style={Styles.formLabel}>Inside Dhaka</FormGroup.Label>
-                                <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                    <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
-                                </FormGroup.InputGroup>
-                            </FormGroup>
-                        </View>
-                        <View style={Styles.col12}>
-                            <FormGroup>
-                                <FormGroup.Label style={Styles.formLabel}>Outside Dhaka</FormGroup.Label>
-                                <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                    <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
-                                </FormGroup.InputGroup>
-                            </FormGroup>
-                        </View>
-                    </View>
+                    </>)}
+                    
                 </AnimScrollView>
             </View>
         );
@@ -131,10 +161,12 @@ const mapStateToProps = (state) => {
     return {
         token: state.userReducer && state.userReducer.token,
         authUser: state.userReducer && state.userReducer.authUser,
+        product: state.productReducer && state.productReducer.product,
     };
 };
 
-export default connect(mapStateToProps)(Shipping);
+
+export default connect(mapStateToProps, {handleProductObjProperty})(Shipping);
 
 const AnimScrollView = styled(Animated.ScrollView)`
     flex: 1;

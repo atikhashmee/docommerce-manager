@@ -169,6 +169,7 @@ class CategoryCollection extends Component {
                             tagTextStyle={styles.tagText}
                             keysForTag={', '}
                         />
+                        <Text style={{fontSize: 10, marginLeft: 3}}>Press comma & space to add a tag</Text>
                     </FormGroup>
                     <FormGroup>
                         <FormGroup.Label style={Styles.formLabel}>Show on Featured Collection</FormGroup.Label>
@@ -212,12 +213,6 @@ const AnimScrollView = styled(Animated.ScrollView)`
     padding-right: 10px;
     padding-top: 10px;
     background-color: ${COLORS.background};
-`;
-
-const PickerWrapper = styled.View`
-    border: 1px solid ${COLORS.primary};
-    background-color: ${COLORS.white};
-    border-radius: 4px;
 `;
 
 const PTagInput = styled(TagInput)`

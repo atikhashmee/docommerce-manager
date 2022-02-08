@@ -15,7 +15,7 @@ const initialState ={
         show_product_when_of_stock: null,
         check_stock_during_add_to_cart: null,
         international_shipping: null,
-        local_delivery: null,
+        local_delivery: false,
         feature: false,
         new_arrival: false,
         weight: null,
@@ -56,6 +56,7 @@ const initialState ={
         warehouse_id: null,
         barcode: null,
         variant_options: [],
+        additional_charges_by_shipping: [],
     }
 }
 

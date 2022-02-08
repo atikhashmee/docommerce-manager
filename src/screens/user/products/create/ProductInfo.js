@@ -11,19 +11,11 @@ import {COLORS} from '@constants';
 import {Picker} from '@react-native-picker/picker';
 import {handleProductObjProperty} from '@actions/productActions'
 
-const Style = StyleSheet.create({
-    textAreaStyle: {
-        paddingVertical: 0,
-        textAlignVertical: 'top',
-    },
-});
-
 class ProductInfo extends Component {
     constructor(props) {
         super(props);
         this.state = {
             spinner: false,
-            selectedLanguage: '',
         };
     }
 
@@ -43,34 +35,31 @@ class ProductInfo extends Component {
                     <FormGroup>
                         <FormGroup.Label style={Styles.formLabel}>Product Name</FormGroup.Label>
                         <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                            <FormGroup.TextInput onChangeText={(val) => this.handleInputField(val, 'name')} />
+                            <FormGroup.TextInput onChangeText={(val) => this.handleInputField(val, 'name')} value={product.name} />
                         </FormGroup.InputGroup>
                     </FormGroup>
                     <FormGroup>
                         <FormGroup.Label style={Styles.formLabel}>Product Page URL</FormGroup.Label>
                         <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                            <FormGroup.TextInput onChangeText={(val) => this.handleInputField(val, 'slug')} />
+                            <FormGroup.TextInput onChangeText={(val) => this.handleInputField(val, 'slug')} value={product.slug} />
                         </FormGroup.InputGroup>
                     </FormGroup>
                     <FormGroup>
                         <FormGroup.Label style={Styles.formLabel}>Product Short Description</FormGroup.Label>
                         <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                            <FormGroup.TextInput style={Style.textAreaStyle} onChangeText={(val) => this.handleInputField(val, 'short_description')} multiline numberOfLines={4} editable />
+                            <FormGroup.TextInput style={Style.textAreaStyle} onChangeText={(val) => this.handleInputField(val, 'short_description')} multiline numberOfLines={4} editable value={product.short_description}  />
                         </FormGroup.InputGroup>
                     </FormGroup>
                     <FormGroup>
                         <FormGroup.Label style={Styles.formLabel}>Product Description</FormGroup.Label>
                         <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                            <FormGroup.TextInput style={Style.textAreaStyle} onChangeText={(val) => this.handleInputField(val, 'description')} multiline numberOfLines={6} editable />
+                            <FormGroup.TextInput style={Style.textAreaStyle} onChangeText={(val) => this.handleInputField(val, 'description')} multiline numberOfLines={6} editable value={product.description} />
                         </FormGroup.InputGroup>
                     </FormGroup>
                     <FormGroup>
                         <FormGroup.Label style={Styles.formLabel}>Status</FormGroup.Label>
                         <PickerWrapper>
-                            <Picker selectedValue={this.state.selectedLanguage} onValueChange={(itemValue, itemIndex) => {
-                                this.setState({selectedLanguage: itemValue}); 
-                                this.handleInputField(itemValue, 'status');
-                                }}>
+                            <Picker selectedValue={product.status} onValueChange={(itemValue, itemIndex) => {this.handleInputField(itemValue, 'status');}}>
                                 <Picker.Item label="Active" value="active" />
                                 <Picker.Item label="Inactive" value="inactive" />
                             </Picker>
@@ -105,3 +94,10 @@ const PickerWrapper = styled.View`
     background-color: ${COLORS.white};
     border-radius: 4px;
 `;
+
+const Style = StyleSheet.create({
+    textAreaStyle: {
+        paddingVertical: 0,
+        textAlignVertical: 'top',
+    },
+});

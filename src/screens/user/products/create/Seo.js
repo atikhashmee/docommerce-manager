@@ -9,12 +9,8 @@ import Header from './Header';
 import Button from '@components/form/buttons/Button';
 import styled from 'styled-components/native';
 import {COLORS} from '@constants';
-import {Picker} from '@react-native-picker/picker';
-import TagInput from 'react-native-tags-input';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {Switch} from 'react-native-paper';
-
-const mainColor = '#3ca897';
+import {handleProductObjProperty} from '@actions/productActions'
+import APIKit from '../../../../config/axios'
 
 const Style = StyleSheet.create({
     textAreaStyle: {
@@ -28,26 +24,16 @@ class Seo extends Component {
         super(props);
         this.state = {
             spinner: false,
-            emails: '',
-            text: '',
-            tags: {
-                tag: '',
-                tagsArray: [],
-            },
-            isSwitchOn: false,
         };
     }
 
-    updateTagState = (state) => {
-        this.setState({
-            tags: state,
-        });
-    };
-
-    onToggleSwitch = () => this.setState({isSwitchOn: !this.state.isSwitchOn});
+    handleInputField(evt, key) {
+        this.props.handleProductObjProperty(evt, key);
+    }
 
     render() {
         const {spinner} = this.state;
+        const {product} = this.props;
         return (
             <View style={Styles.container}>
                 <Header navigation={this.props.navigation} title="Add New Product" showBack={true} />
@@ -57,19 +43,19 @@ class Seo extends Component {
                     <FormGroup>
                         <FormGroup.Label style={Styles.formLabel}>Page Title</FormGroup.Label>
                         <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                            <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                            <FormGroup.TextInput onChangeText={(val) => this.handleInputField(val, 'page_title')} value={product.page_title} />
                         </FormGroup.InputGroup>
                     </FormGroup>
                     <FormGroup>
                         <FormGroup.Label style={Styles.formLabel}>Meta Keywords</FormGroup.Label>
                         <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                            <FormGroup.TextInput onChangeText={(val) => this.setState({mobile: val})} />
+                            <FormGroup.TextInput onChangeText={(val) => this.handleInputField(val, 'meta_keyword')} value={product.meta_keyword} />
                         </FormGroup.InputGroup>
                     </FormGroup>
                     <FormGroup>
                         <FormGroup.Label style={Styles.formLabel}>Meta Description</FormGroup.Label>
                         <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                            <FormGroup.TextInput style={Style.textAreaStyle} onChangeText={(val) => this.setState({mobile: val})} multiline numberOfLines={4} editable />
+                            <FormGroup.TextInput style={Style.textAreaStyle} onChangeText={(val) => this.handleInputField(val, 'meta_description')} value={product.meta_description} multiline numberOfLines={4} editable />
                         </FormGroup.InputGroup>
                     </FormGroup>
 
@@ -97,10 +83,11 @@ const mapStateToProps = (state) => {
     return {
         token: state.userReducer && state.userReducer.token,
         authUser: state.userReducer && state.userReducer.authUser,
+        product: state.productReducer && state.productReducer.product,
     };
 };
 
-export default connect(mapStateToProps)(Seo);
+export default connect(mapStateToProps, {handleProductObjProperty})(Seo);
 
 const AnimScrollView = styled(Animated.ScrollView)`
     flex: 1;
@@ -108,15 +95,6 @@ const AnimScrollView = styled(Animated.ScrollView)`
     padding-right: 10px;
     padding-top: 10px;
     background-color: ${COLORS.background};
-`;
-
-const PickerWrapper = styled.View`
-    border: 1px solid ${COLORS.primary};
-    background-color: ${COLORS.white};
-`;
-
-const PTagInput = styled(TagInput)`
-    border: 1px solid red;
 `;
 
 const styles = StyleSheet.create({
