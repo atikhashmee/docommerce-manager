@@ -8,6 +8,7 @@ import Header from './Header';
 import styled, {css} from 'styled-components/native';
 import {COLORS, icons} from '@constants';
 import ImagePicker from 'react-native-image-crop-picker';
+import {handleProductObjProperty} from '@actions/productActions'
 
 class Media extends Component {
     constructor(props) {
@@ -15,8 +16,6 @@ class Media extends Component {
         this.state = {
             spinner: false,
             modalVisible: false,
-            image: null,
-            images: null,
             imagePickType: '',
         };
     }
@@ -57,21 +56,18 @@ class Media extends Component {
             cropperActiveWidgetColor: 'white',
             cropperToolbarWidgetColor: '#3498DB',
         })
-            .then((image) => {
-                console.log('received image', image);
-                this.setState({
-                    image: {
-                        uri: image.path,
-                        width: image.width,
-                        height: image.height,
-                        mime: image.mime,
-                    },
-                });
-                this.imagePickerModalToggle();
-            })
-            .catch((e) => {
-                console.log(e);
-            });
+        .then((image) => {
+            this.props.handleProductObjProperty({
+                uri: image.path,
+                width: image.width,
+                height: image.height,
+                mime: image.mime,
+            }, 'image')
+            this.imagePickerModalToggle();
+        })
+        .catch((e) => {
+            console.log(e);
+        });
     }
 
     pickMultiple() {
@@ -82,21 +78,19 @@ class Media extends Component {
             includeExif: true,
             forceJpg: true,
         })
-            .then((images) => {
-                this.setState({
-                    images: images.map((i) => {
-                        console.log('received image', i);
-                        return {
-                            uri: i.path,
-                            width: i.width,
-                            height: i.height,
-                            mime: i.mime,
-                        };
-                    }),
-                });
-                this.imagePickerModalToggle();
-            })
-            .catch((e) => alert(e));
+        .then((images) => {
+            this.props.handleProductObjProperty(images.map((i) => {
+                console.log('received image', i);
+                return {
+                    uri: i.path,
+                    width: i.width,
+                    height: i.height,
+                    mime: i.mime,
+                };
+            }), 'otherImages')
+            this.imagePickerModalToggle();
+        })
+        .catch((e) => alert(e));
     }
 
     pickSingleWithCamera(cropping, mediaType = 'photo') {
@@ -107,19 +101,16 @@ class Media extends Component {
             includeExif: true,
             mediaType,
         })
-            .then((image) => {
-                console.log('received image', image);
-                this.setState({
-                    image: {
-                        uri: image.path,
-                        width: image.width,
-                        height: image.height,
-                        mime: image.mime,
-                    },
-                });
-                this.imagePickerModalToggle();
-            })
-            .catch((e) => alert(e));
+        .then((image) => {
+            this.props.handleProductObjProperty({
+                uri: image.path,
+                width: image.width,
+                height: image.height,
+                mime: image.mime,
+            }, 'image')
+            this.imagePickerModalToggle();
+        })
+        .catch((e) => alert(e));
     }
 
     renderImage(image) {
@@ -130,7 +121,6 @@ class Media extends Component {
         if (image.mime && image.mime.toLowerCase().indexOf('video/') !== -1) {
             return this.renderVideo(image);
         }
-
         return this.renderImage(image);
     }
 
@@ -139,14 +129,11 @@ class Media extends Component {
     }
     render() {
         const {spinner} = this.state;
+        const {product} = this.props;
         return (
             <View style={Styles.container}>
                 <Header navigation={this.props.navigation} title="Add New Product" showBack={true} />
                 <Spinner visible={spinner} textContent={'Loading...'} />
-                {/* <ScrollView>
-                    {this.state.image ? this.renderAsset(this.state.image) : null}
-                    {this.state.images ? this.state.images.map((i) => <View key={i.uri}>{this.renderAsset(i)}</View>) : null}
-                </ScrollView> */}
                 <AnimScrollView style={[Styles.topContainer]}>
                     <Styles.PageHeader>Media</Styles.PageHeader>
                     <MediaWrapper>
@@ -169,12 +156,10 @@ class Media extends Component {
                             <Text>Images</Text>
                         </ImagesBox>
                     </MediaWrapper>
-
-                    {/* <Styles.PageHeader>Thumb Image</Styles.PageHeader> */}
-                    {this.state.image ? this.renderAsset(this.state.image) : null}
+                    {product.image ? this.renderAsset(product.image) : null}
                     <ImagesWrapper>
-                        {this.state.images
-                            ? this.state.images.map((i) => (
+                        {product.otherImages
+                            ? product.otherImages.map((i) => (
                                   <ImageBox key={i.uri}>
                                       {this.renderAsset(i)}
                                       <CrossButton
@@ -187,19 +172,6 @@ class Media extends Component {
                               ))
                             : null}
                     </ImagesWrapper>
-
-                    {/* <ImagesWrapper>
-                        {Array(22)
-                            .fill(0)
-                            .map((item, k) => {
-                                return (
-                                    <ImageBox key={k}>
-                                        <Text>Image 1</Text>
-                                        <CrossButton>{icons.IconAvater('times', 15, `${COLORS.primary}`, 'fa')}</CrossButton>
-                                    </ImageBox>
-                                );
-                            })}
-                    </ImagesWrapper> */}
                 </AnimScrollView>
                 <Modal
                     animationType="slide"
@@ -242,10 +214,11 @@ const mapStateToProps = (state) => {
     return {
         token: state.userReducer && state.userReducer.token,
         authUser: state.userReducer && state.userReducer.authUser,
+        product: state.productReducer && state.productReducer.product,
     };
 };
 
-export default connect(mapStateToProps)(Media);
+export default connect(mapStateToProps, {handleProductObjProperty})(Media);
 
 const AnimScrollView = styled(Animated.ScrollView)`
     flex: 1;

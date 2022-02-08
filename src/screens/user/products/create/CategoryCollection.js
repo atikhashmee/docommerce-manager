@@ -155,10 +155,6 @@ class CategoryCollection extends Component {
                             updateState={this.updateTagState}
                             tags={this.state.tags}
                             placeholder="Tags..."
-                            // label="Press comma & space to add a tag"
-                            // labelStyle={{color: '#000'}}
-                            // leftElement={<Icon name={'tag-multiple'} type={'material-community'} color={this.state.tagsText} />}
-                            // leftElementContainerStyle={{marginLeft: 3}}
                             containerStyle={styles.tagInputContainerStyle}
                             inputContainerStyle={[styles.textInput, { backgroundColor: COLORS.white, margin: 0 }]}
                             inputStyle={{ color: this.state.tagsText }}

@@ -172,6 +172,12 @@ class PricingInventory extends Component {
         this.props.handleProductObjProperty(isEnable, 'has_variant')
     }
 
+    calculateProfit() {
+        console.log(Number(this.props.product.price), "---" ,Number(this.props.product.cost));
+        let profit_amount = ((Number(this.props.product.price) || 0) - (Number(this.props.product.cost) || 0))
+        this.handleInputField(profit_amount, 'profit_amount')
+    }
+
     render() {
         const {spinner, warehouses, warehouseOpen, warehouseValue} = this.state;
         const {product} = this.props;
@@ -195,9 +201,9 @@ class PricingInventory extends Component {
                             <View style={Styles.row}>
                                 <View style={Styles.col6}>
                                     <FormGroup style={styles.formGroupStyle}>
-                                        <FormGroup.Label style={Styles.formLabel}>Previous Price {product.old_price}</FormGroup.Label>
+                                        <FormGroup.Label style={Styles.formLabel}>Previous Price</FormGroup.Label>
                                         <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                            <FormGroup.TextInput  keyboardType="number-pad" onChangeText={(val) => this.handleInputField(val, 'old_price')} />
+                                            <FormGroup.TextInput  keyboardType="number-pad" onChangeText={(val) => this.handleInputField(val, 'old_price')} value={String(product.old_price)} />
                                         </FormGroup.InputGroup>
                                     </FormGroup>
                                 </View>
@@ -205,7 +211,7 @@ class PricingInventory extends Component {
                                     <FormGroup style={styles.formGroupStyle}>
                                         <FormGroup.Label style={Styles.formLabel}>Selling Price</FormGroup.Label>
                                         <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                            <FormGroup.TextInput  keyboardType="number-pad" onChangeText={(val) => this.handleInputField(val, 'price')} />
+                                            <FormGroup.TextInput  keyboardType="number-pad" onChangeText={(val) => this.handleInputField(val, 'price')} onBlur={() => this.calculateProfit()} value={String(product.price)} />
                                         </FormGroup.InputGroup>
                                     </FormGroup>
                                 </View>
@@ -213,15 +219,15 @@ class PricingInventory extends Component {
                                     <FormGroup style={styles.formGroupStyle}>
                                         <FormGroup.Label style={Styles.formLabel}>Product Cost</FormGroup.Label>
                                         <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                            <FormGroup.TextInput  keyboardType="number-pad" onChangeText={(val) => this.handleInputField(val, 'cost')} />
+                                            <FormGroup.TextInput  keyboardType="number-pad" onChangeText={(val) => this.handleInputField(val, 'cost')} onBlur={() => this.calculateProfit()} value={String(product.cost)} />
                                         </FormGroup.InputGroup>
                                     </FormGroup>
                                 </View>
                                 <View style={Styles.col6}>
                                     <FormGroup style={styles.formGroupStyle}>
                                         <FormGroup.Label style={Styles.formLabel}>Profit Amount</FormGroup.Label>
-                                        <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                            <FormGroup.TextInput  keyboardType="number-pad" onChangeText={(val) => this.handleInputField(val, 'profit_amount')} />
+                                        <FormGroup.InputGroup style={{...Styles.inputGroupStyle, backgroundColor: '#f0f0f0'}}>
+                                            <FormGroup.TextInput  keyboardType="number-pad" editable={false} value={String(product.profit_amount)} />
                                         </FormGroup.InputGroup>
                                     </FormGroup>
                                 </View>
@@ -232,7 +238,7 @@ class PricingInventory extends Component {
                                     <FormGroup style={styles.formGroupStyle}>
                                         <FormGroup.Label style={Styles.formLabel}>Initial Stock Quantity</FormGroup.Label>
                                         <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                            <FormGroup.TextInput  keyboardType="number-pad" onChangeText={(val) => this.handleInputField(val, 'initial_stock_qty')} />
+                                            <FormGroup.TextInput  keyboardType="number-pad" onChangeText={(val) => this.handleInputField(val, 'initial_stock_qty')} value={String(product.initial_stock_qty)} />
                                         </FormGroup.InputGroup>
                                     </FormGroup>
                                 </View>
@@ -240,7 +246,7 @@ class PricingInventory extends Component {
                                     <FormGroup style={styles.formGroupStyle}>
                                         <FormGroup.Label style={Styles.formLabel}>SKU</FormGroup.Label>
                                         <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                            <FormGroup.TextInput onChangeText={(val) => this.handleInputField(val, 'sku')} />
+                                            <FormGroup.TextInput onChangeText={(val) => this.handleInputField(val, 'sku')} value={product.sku} />
                                         </FormGroup.InputGroup>
                                     </FormGroup>
                                 </View>
@@ -264,7 +270,7 @@ class PricingInventory extends Component {
                                     <FormGroup style={styles.formGroupStyle}>
                                         <FormGroup.Label style={Styles.formLabel}>Barcode</FormGroup.Label>
                                         <FormGroup.InputGroup style={Styles.inputGroupStyle}>
-                                            <FormGroup.TextInput onChangeText={(val) => this.handleInputField(val, 'barcode')} />
+                                            <FormGroup.TextInput onChangeText={(val) => this.handleInputField(val, 'barcode')} value={product.barcode} />
                                         </FormGroup.InputGroup>
                                     </FormGroup>
                                 </View>

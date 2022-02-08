@@ -7,8 +7,8 @@ const initialState ={
         image: null,
         short_description: null,
         description: null,
-        price: null,
-        old_price: null,
+        price: '',
+        old_price: '',
         tax: null,
         barcode: null,
         show_in_facebook: null,
@@ -49,14 +49,15 @@ const initialState ={
         tags: [],
         has_variant: false,
         variants: [],
-        cost: null,
-        profit_amount: null,
+        cost: '',
+        profit_amount: '',
         sku: null,
         initial_stock_qty: null,
         warehouse_id: null,
         barcode: null,
         variant_options: [],
         additional_charges_by_shipping: [],
+        otherImages: [],
     }
 }
 
