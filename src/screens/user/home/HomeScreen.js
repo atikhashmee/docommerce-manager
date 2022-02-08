@@ -63,7 +63,7 @@ class HomeScreen extends Component {
                             <ScrollView showsHorizontalScrollIndicator={false} contentContainerStyle={[Styles.row, {justifyContent: 'space-between'}]}>
                                 <SmallBox>
                                     <A onPress={() => this.menuNavigation()}>
-                                        <MenuText>Add Product</MenuText>
+                                        <MenuText>Products</MenuText>
                                     </A>
                                 </SmallBox>
                                 <LargeBox>
