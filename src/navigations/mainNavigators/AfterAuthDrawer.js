@@ -70,6 +70,15 @@ const DrawerContent = (props) => {
                                 props.navigation.navigate('ProfileScreen', {screen: 'Profile'});
                             }}
                         />
+                        {/* <DrawerItem
+                            icon={({color, size}) => <Icon name="account-outline" color={color} size={size} />}
+                            label="Product"
+                            onPress={() => {
+                                props.navigation.navigate('HomeScreen', {screen: 'ProductCreateScreen', params: {
+                                    screen: 'Product',
+                                  },});
+                            }}
+                        /> */}
                     </Drawer.Section>
                 </View>
             </DrawerContentScrollView>
