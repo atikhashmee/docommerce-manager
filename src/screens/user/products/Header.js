@@ -5,6 +5,9 @@ import {Appbar} from 'react-native-paper';
 import {COLORS, icons} from '@constants';
 
 class Header extends Component {
+    constructor(props) {
+        super(props);
+    }
     onPressBackButton = () => {
         if (this.props.handleBackButton) {
             this.props.handleBackButton();
@@ -19,15 +22,20 @@ class Header extends Component {
     render() {
         return (
             <Appbar.Header style={{backgroundColor: COLORS.white}}>
-                <Appbar.Content title={this.props.title ? this.props.title : ''} style={Styles.headerContent} />
+                
                 <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
                     {this.props.showBack ? (
                         <Appbar.BackAction onPress={this.onPressBackButton} />
                     ) : (
                         this.props.token && <Appbar.Action icon={() => icons.align_left} onPress={() => this.props.navigation.openDrawer()} />
                     )}
-                    <View style={{flex: 1}} />
-                    <Appbar.Action icon={'filter'} onPress={() => {}} />
+                    <Appbar.Content title={this.props.title ? this.props.title : ''} 
+                        titleStyle={{
+                            color: 'black', 
+                            textAlign: 'center'
+                        }} 
+                    />
+                    <Appbar.Action icon={'filter'} onPress={() => {this.props.toggleModal()}} />
                 </View>
             </Appbar.Header>
         );

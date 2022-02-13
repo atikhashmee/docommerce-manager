@@ -12,6 +12,7 @@ import Branding from '@screens/user/products/create/Branding';
 import Shipping from '@screens/user/products/create/Shipping';
 import Seo from '@screens/user/products/create/Seo';
 import ProductHomeScreen from '@screens/user/products/Home';
+import Details from '@screens/user/products/Details';
 import { useSelector } from 'react-redux'
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -25,6 +26,7 @@ const ProductMainStack = () => {
     return (
         <Stack.Navigator headerMode="none">
             <Stack.Screen name="Products" component={ProductHomeScreen} />
+            <Stack.Screen name="ProductDetail" component={Details} />
             <Stack.Screen name="CreateProduct" component={ProductTabNavigator} />
         </Stack.Navigator>
     );

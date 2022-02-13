@@ -7,8 +7,11 @@ import Header from './Header';
 import styled, {css} from 'styled-components';
 import {COLORS, icons, SIZES} from '@constants';
 import {connect} from 'react-redux';
-import { FAB, List, Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
+import { FAB, Avatar, Button, Card, Modal } from 'react-native-paper';
+import FormGroup from '@components/form/FormGroup';
+import {Picker} from '@react-native-picker/picker';
 import APIKit from '../../../config/axios'
+import DButton from '@components/form/buttons/Button';
 class ProductList extends Component {
     constructor(props) {
         super(props);
@@ -16,6 +19,12 @@ class ProductList extends Component {
             spinner: false,
             refreshing: false,
             products: [],
+            filterModalVisible: false,
+            filter: {
+                supplier: '',
+                status: '',
+                source: ''
+            }
         };
     }
 
@@ -36,27 +45,103 @@ class ProductList extends Component {
         });
     }
 
+    toggleModal =  () => {
+        this.setState({filterModalVisible: !this.state.filterModalVisible})
+    }
     
     render() {
-        const LeftContent = props => <Avatar.Icon {...props} icon="folder" />
         return (
             <View style={Styles.container}>
-                <Header navigation={this.props.navigation} showBack={true} title="Products" />
+                <Header navigation={this.props.navigation} showBack={true} title="Products" toggleModal={this.toggleModal} />
                 <Spinner visible={this.state.spinner} textContent={'Loading...'} />
                 <AnimScrollView>
                     {this.state.products.map((item, itemk)  => (  <Card key={itemk}>
                         <Card.Title title={item.name} subtitle="Card Subtitle" />
                         <Card.Actions>
-                            <Button>Detail &gt;&gt; </Button>
+                            <Button onPress={()=> this.props.navigation.navigate('ProductDetail', {
+                                product: item,
+                            })}>Detail &gt;&gt; </Button>
                         </Card.Actions>
                     </Card>))}
                 </AnimScrollView>
-                <FAB
+                <Modal visible={this.state.filterModalVisible} 
+                    onDismiss={() => this.setState({filterModalVisible: !this.state.filterModalVisible})} 
+                    contentContainerStyle={styles.containerStyle}
+                    style={styles.modalStyle}>
+                    <AnimScrollView>
+                        <FormGroup>
+                            <FormGroup.Label style={Styles.formLabel}>Supllier</FormGroup.Label>
+                            <PickerWrapper>
+                                <Picker selectedValue={this.state.filter.supplier} onValueChange={ itemValue => { 
+                                    this.setState(prevState => ({
+                                        ...prevState, 
+                                        filter: {
+                                            ...prevState.filter,
+                                            supplier: itemValue
+                                        }
+                                    }))
+                                 } }>
+                                    <Picker.Item label="Active" value="active" />
+                                    <Picker.Item label="Inactive" value="inactive" />
+                                </Picker>
+                            </PickerWrapper>
+                        </FormGroup>
+                        <FormGroup>
+                            <FormGroup.Label style={Styles.formLabel}>Status</FormGroup.Label>
+                            <PickerWrapper>
+                                <Picker selectedValue={this.state.filter.status} onValueChange={ itemValue => { 
+                                    this.setState(prevState => ({
+                                        ...prevState, 
+                                        filter: {
+                                            ...prevState.filter,
+                                            status: itemValue
+                                        }
+                                    }))
+                                 } }>
+                                    <Picker.Item label="Active" value="active" />
+                                    <Picker.Item label="Inactive" value="inactive" />
+                                </Picker>
+                            </PickerWrapper>
+                        </FormGroup>
+                        <FormGroup>
+                        <FormGroup.Label style={Styles.formLabel}>Source</FormGroup.Label>
+                        <PickerWrapper>
+                            <Picker selectedValue={this.state.filter.source} onValueChange={ itemValue => { 
+                                    this.setState(prevState => ({
+                                        ...prevState, 
+                                        filter: {
+                                            ...prevState.filter,
+                                            source: itemValue
+                                        }
+                                    }))
+                                 } }>
+                                <Picker.Item label="Active" value="active" />
+                                <Picker.Item label="Inactive" value="inactive" />
+                            </Picker>
+                        </PickerWrapper>
+                    </FormGroup>
+                    <View style={styles.buttonContainer}>
+                        <View style={Styles.row}>
+                            <View style={Styles.col6}>
+                                <DButton onPress={this.onPressSubmit} style={styles.button} containerStyle={styles.buttonInner}>
+                                    <DButton.Text style={styles.btnText}>Reset</DButton.Text>
+                                </DButton>
+                            </View>
+                            <View style={Styles.col6}>
+                                <DButton onPress={this.onPressSubmit} style={styles.button} containerStyle={styles.buttonInner}>
+                                    <DButton.Text style={styles.btnText}>Filter</DButton.Text>
+                                </DButton>
+                            </View>
+                        </View>
+                    </View>
+                    </AnimScrollView>
+                </Modal>
+                {!this.state.filterModalVisible && <FAB 
                     style={styles.fab}
                     large
                     icon="plus"
                     onPress={() => this.props.navigation.navigate('CreateProduct')}
-                />
+                />}
             </View>
         );
     }
@@ -81,6 +166,12 @@ const AnimScrollView = styled(Animated.ScrollView)`
     background-color: ${COLORS.background};
 `;
 
+const PickerWrapper = styled.View`
+    border: 1px solid ${COLORS.primary};
+    background-color: ${COLORS.white};
+    border-radius: 4px;
+`;
+
 const styles = StyleSheet.create({
     fab: {
       position: 'absolute',
@@ -88,5 +179,18 @@ const styles = StyleSheet.create({
       right: 0,
       bottom: 0,
       backgroundColor: COLORS.primary,
+    },
+    modalStyle: {
+        alignItems: 'flex-end',
+    },
+    containerStyle: {
+        width: '70%',
+        height: '90%',
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        marginTop: 10,
+        alignItems: 'center',
+        justifyContent: 'flex-end',
     },
 })
