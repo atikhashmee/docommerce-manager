@@ -7,7 +7,7 @@ import Header from './Header';
 import styled, {css} from 'styled-components';
 import {COLORS, icons, SIZES} from '@constants';
 import {connect} from 'react-redux';
-import { FAB, Avatar, Button, Card, Modal } from 'react-native-paper';
+import { FAB, Avatar, Button, Card, Modal, Title, Paragraph } from 'react-native-paper';
 import FormGroup from '@components/form/FormGroup';
 import {Picker} from '@react-native-picker/picker';
 import APIKit from '../../../config/axios'
@@ -55,8 +55,14 @@ class ProductList extends Component {
                 <Header navigation={this.props.navigation} showBack={true} title="Products" toggleModal={this.toggleModal} />
                 <Spinner visible={this.state.spinner} textContent={'Loading...'} />
                 <AnimScrollView>
-                    {this.state.products.map((item, itemk)  => (  <Card key={itemk}>
-                        <Card.Title title={item.name} subtitle="Card Subtitle" />
+                    {this.state.products.map((item, itemk)  => (  <Card key={itemk} style={styles.cardStyle}>
+                        <Card.Content>
+                            <Title>{item.name}</Title>
+                            <View style={{flexDirection: 'row'}}>
+                                <Text> {this.props.authUser?.store?.cur_symb}{item.price}</Text>
+                                <Text style={{textDecorationLine: 'line-through', marginLeft: 10}}>{this.props.authUser?.store?.cur_symb}{item.old_price}</Text>
+                            </View>
+                        </Card.Content>
                         <Card.Actions>
                             <Button onPress={()=> this.props.navigation.navigate('ProductDetail', {
                                 product: item,
@@ -193,4 +199,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'flex-end',
     },
+    cardStyle: {
+        marginBottom: 10,
+    }
 })

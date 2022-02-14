@@ -35,7 +35,7 @@ class Header extends Component {
                             textAlign: 'center'
                         }} 
                     />
-                    <Appbar.Action icon={'filter'} onPress={() => {this.props.toggleModal()}} />
+                    {this.props.showFilter &&  <Appbar.Action icon={'filter'} onPress={() => {this.props.toggleModal()}} />}
                 </View>
             </Appbar.Header>
         );

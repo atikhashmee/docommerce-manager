@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {SafeAreaView, ScrollView, Text, View, ToastAndroid, Pressable, StyleSheet} from 'react-native';
+import {SafeAreaView, ScrollView, Text, View, ToastAndroid, Pressable, StyleSheet, ImageBackground} from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Styles from '@styles';
 import Animated from 'react-native-reanimated';
@@ -34,8 +34,10 @@ class Drafts extends Component {
             <View style={Styles.container}>
                 <Header navigation={this.props.navigation} showBack={true} title="Drafts" />
                 <Spinner visible={this.state.spinner} textContent={'Loading...'} />
-                <AnimScrollView>
-                    <Text>Drafts</Text>
+                <AnimScrollView contentContainerStyle={{flexGrow: 1, justifyContent: 'center'}}>
+                    <ImageBackground style={[styles.emptyBox, styles.noItemImageStyle]} source={require('../../../assets/img/empty_box.png')} resizeMode="cover">
+                        <Text style={{alignSelf: 'center', marginTop: 'auto'}}>No Drafts Item found</Text>
+                    </ImageBackground>
                 </AnimScrollView>
                 <FAB
                     style={styles.fab}
@@ -75,4 +77,11 @@ const styles = StyleSheet.create({
       bottom: 0,
       backgroundColor: COLORS.primary,
     },
+    emptyBox: {
+        alignSelf: 'center',
+    },
+    noItemImageStyle: {
+        width: '100%', 
+        height: '50%',
+    }
 })
