@@ -3,6 +3,7 @@ import {StyleSheet, View} from 'react-native';
 import {connect} from 'react-redux';
 import {Appbar} from 'react-native-paper';
 import {COLORS, icons} from '@constants';
+import {saveToDraft} from '@actions/productActions'
 
 class Header extends Component {
     onPressBackButton = () => {
@@ -32,7 +33,7 @@ class Header extends Component {
                         style={{flex: 0, justifyContent: 'flex-end', alignItems: 'flex-end'}}
                         titleStyle={{color: COLORS.primary}}
                         onPress={() => {
-                            alert('clicked');
+                            this.props.saveToDraft()
                         }}
                     />
                 </View>
@@ -60,4 +61,4 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default connect(mapStateToProps)(Header);
+export default connect(mapStateToProps, {saveToDraft})(Header);

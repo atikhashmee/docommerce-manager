@@ -146,7 +146,11 @@ class ProductList extends Component {
                     style={styles.fab}
                     large
                     icon="plus"
-                    onPress={() => this.props.navigation.navigate('CreateProduct')}
+                    onPress={() => this.props.navigation.navigate('CreateProduct', {
+                        modify_type: 'create_new',
+                        modify_source: 'none', 
+                        modify_item: null
+                    })}
                 />}
             </View>
         );

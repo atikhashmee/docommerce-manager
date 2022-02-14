@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {COLORS} from '@constants';
@@ -13,11 +13,11 @@ import Shipping from '@screens/user/products/create/Shipping';
 import Seo from '@screens/user/products/create/Seo';
 import ProductHomeScreen from '@screens/user/products/Home';
 import Details from '@screens/user/products/Details';
-import { useSelector } from 'react-redux'
-
+import { useSelector, useDispatch } from 'react-redux'
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 import {bottomTabBarOptions} from '@/navigations/navigators/NavigatorOptions';
+import {createOrEdit} from '@actions/productActions'
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -106,8 +106,12 @@ const MyTabBar = ({state, descriptors, navigation}) => {
     );
 };
 
-const ProductTabNavigator = () => {
+const ProductTabNavigator = ({route}) => {
+    const dispatch = useDispatch()
     const product = useSelector((state) => state.productReducer.product)
+    useEffect(() => {
+        dispatch(createOrEdit(route.params))
+    }, [])
     return (
         <Tab.Navigator
             backBehavior={'initialRoute'}

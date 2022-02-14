@@ -8,14 +8,17 @@ import styled, {css} from 'styled-components';
 import {COLORS, icons, SIZES} from '@constants';
 import {connect} from 'react-redux';
 import { FAB, List, Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
+import AuthStorage from '@/core/session/AuthStorage';
 import APIKit from '../../../config/axios'
+import {removeDraft} from '@actions/productActions'
+
 class Drafts extends Component {
     constructor(props) {
         super(props);
         this.state = {
             spinner: false,
             refreshing: false,
-            products: [],
+            draftProducts: [],
         };
     }
 
@@ -24,26 +27,55 @@ class Drafts extends Component {
     }
 
     componentDidMount() {
-        
+        this.setState({ spinner: true})
+        AuthStorage.get('drafts').then(draftItems => {
+            this.setState({ spinner: false})
+            let items = []
+            if (draftItems) {
+                items = JSON.parse(draftItems);
+            }
+            this.setState({draftProducts: [...items]})
+        })
     }
 
     
     render() {
         const LeftContent = props => <Avatar.Icon {...props} icon="folder" />
+        const {draftProducts} = this.state
         return (
             <View style={Styles.container}>
                 <Header navigation={this.props.navigation} showBack={true} title="Drafts" />
                 <Spinner visible={this.state.spinner} textContent={'Loading...'} />
-                <AnimScrollView contentContainerStyle={{flexGrow: 1, justifyContent: 'center'}}>
-                    <ImageBackground style={[styles.emptyBox, styles.noItemImageStyle]} source={require('../../../assets/img/empty_box.png')} resizeMode="cover">
+                {draftProducts.length === 0 && (<AnimScrollView contentContainerStyle={{flexGrow: 1, justifyContent: 'center'}}>
+                    <ImageBackground style={[styles.emptyBox, styles.noItemImageStyle]} source={require('@assets/img/empty_box.png')} resizeMode="cover">
                         <Text style={{alignSelf: 'center', marginTop: 'auto'}}>No Drafts Item found</Text>
                     </ImageBackground>
-                </AnimScrollView>
+                </AnimScrollView>)}
+                {draftProducts.length > 0 && <AnimScrollView>
+                        {draftProducts.map(({draft_id, draft_item}, itemk)  => (  <Card key={itemk} style={styles.cardStyle}>
+                            <Card.Content>
+                                <Title>{draft_item.name}</Title>
+                            </Card.Content>
+                            <Card.Actions>
+                                <Button onPress={()=> this.props.navigation.navigate('CreateProduct', {
+                                    modify_type: 'edit',
+                                    modify_source: 'draft', 
+                                    modify_item: draft_item
+                                })}>Edit &gt;&gt; </Button>
+                                <Button onPress={()=> this.props.removeDraft(draft_id)}>Remove &gt;&gt; </Button>
+                            </Card.Actions>
+                    </Card>))}
+                </AnimScrollView>}
+
                 <FAB
                     style={styles.fab}
                     large
                     icon="plus"
-                    onPress={() => this.props.navigation.navigate('CreateProduct')}
+                    onPress={() => this.props.navigation.navigate('CreateProduct', {
+                        modify_type: 'create_new',
+                        modify_source: 'none', 
+                        modify_item: null
+                    })}
                 />
             </View>
         );
@@ -59,7 +91,7 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default connect(mapStateToProps)(Drafts);
+export default connect(mapStateToProps, {removeDraft})(Drafts);
 
 const AnimScrollView = styled(Animated.ScrollView)`
     flex: 1;
@@ -83,5 +115,8 @@ const styles = StyleSheet.create({
     noItemImageStyle: {
         width: '100%', 
         height: '50%',
+    },
+    cardStyle: {
+        marginBottom: 10,
     }
 })

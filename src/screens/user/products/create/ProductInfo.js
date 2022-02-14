@@ -24,17 +24,17 @@ class ProductInfo extends Component {
     }
 
     generateSlug () {
-        let productSlug = this.props.product
-            .name
-            .toString()
-            .toLowerCase()
-            .replace(/\s+/g, '-')           // Replace spaces with -
-            .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
-            .replace(/\-\-+/g, '-')         // Replace multiple - with single -
-            .replace(/^-+/, '')             // Trim - from start of text
-            .replace(/-+$/, '')
-            .replace(/[[/\]{}()*+?.!~`@%&_=":;,\\^$|#\s]/g, '');
-            this.handleInputField(productSlug, 'slug')
+        // let productSlug = this.props.product
+        //     .name
+        //     .toString()
+        //     .toLowerCase()
+        //     .replace(/\s+/g, '-')           // Replace spaces with -
+        //     .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+        //     .replace(/\-\-+/g, '-')         // Replace multiple - with single -
+        //     .replace(/^-+/, '')             // Trim - from start of text
+        //     .replace(/-+$/, '')
+        //     .replace(/[[/\]{}()*+?.!~`@%&_=":;,\\^$|#\s]/g, '');
+        //     this.handleInputField(productSlug, 'slug')
     }
 
     render() {
@@ -47,7 +47,7 @@ class ProductInfo extends Component {
                 <AnimScrollView>
                     <Styles.PageHeader>Product Information</Styles.PageHeader>
                     <FormGroup>
-                        <FormGroup.Label style={Styles.formLabel}>Product Name {product.name}</FormGroup.Label>
+                        <FormGroup.Label style={Styles.formLabel}>Product Name</FormGroup.Label>
                         <FormGroup.InputGroup style={Styles.inputGroupStyle}>
                             <FormGroup.TextInput onChangeText={(val) => {this.handleInputField(val, 'name'); this.generateSlug()}} value={product.name} />
                         </FormGroup.InputGroup>
