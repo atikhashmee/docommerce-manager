@@ -11,6 +11,8 @@ export const SET_USER = 'SET_USER';
 export const SET_PRODUCT = "SET_PRODUCT";
 export const SET_PRODUCTS = "SET_PRODUCTS";
 
+export const SET_DRAFTS = "SET_DRAFTS";
+
 export const PRODUCT_OBJ =  {
     name: null,
     image: null,

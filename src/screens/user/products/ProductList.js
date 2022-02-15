@@ -37,7 +37,7 @@ class ProductList extends Component {
         APIKit.get('/api/products')
         .then((response) => {
             this.setState({ spinner: false})
-            this.setState({ products: response.data})
+            this.setState({ products: response.data.data})
         })
         .catch((error) => {
             this.setState({ spinner: false})

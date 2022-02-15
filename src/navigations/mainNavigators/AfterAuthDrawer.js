@@ -17,7 +17,7 @@ class AfterAuthDrawer extends Component {
     render() {
         return (
             <DrawerCreate.Navigator backBehavior={'initialRoute'} drawerContent={(props) => <DrawerContent {...props} {...this.props} />}>
-                <DrawerCreate.Screen options={{unmountOnBlur: true}} name="HomeScreen" component={HomeScreenNavigator} />
+                <DrawerCreate.Screen options={{unmountOnBlur: true}} name="HomeScreenStack" component={HomeScreenNavigator} />
                 <DrawerCreate.Screen name="ProfileScreen" component={ProfileScreen} />
             </DrawerCreate.Navigator>
         );

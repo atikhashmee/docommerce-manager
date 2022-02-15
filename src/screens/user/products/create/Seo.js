@@ -9,7 +9,7 @@ import Header from './Header';
 import Button from '@components/form/buttons/Button';
 import styled from 'styled-components/native';
 import {COLORS} from '@constants';
-import {handleProductObjProperty} from '@actions/productActions'
+import {handleProductObjProperty, cancelOrDiscard, saveToServer} from '@actions/productActions'
 import APIKit from '../../../../config/axios'
 
 const Style = StyleSheet.create({
@@ -62,12 +62,12 @@ class Seo extends Component {
                     <View style={styles.buttonContainer}>
                         <View style={Styles.row}>
                             <View style={Styles.col6}>
-                                <Button onPress={this.onPressSubmit} style={styles.button} containerStyle={styles.buttonInner}>
+                                <Button onPress={() => { this.props.cancelOrDiscard() }} style={styles.button} containerStyle={styles.buttonInner}>
                                     <Button.Text style={styles.btnText}>Discard</Button.Text>
                                 </Button>
                             </View>
                             <View style={Styles.col6}>
-                                <Button onPress={this.onPressSubmit} style={styles.button} containerStyle={styles.buttonInner}>
+                                <Button onPress={() => { this.props.saveToServer() }} style={styles.button} containerStyle={styles.buttonInner}>
                                     <Button.Text style={styles.btnText}>Save</Button.Text>
                                 </Button>
                             </View>
@@ -87,7 +87,7 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default connect(mapStateToProps, {handleProductObjProperty})(Seo);
+export default connect(mapStateToProps, {handleProductObjProperty, cancelOrDiscard, saveToServer})(Seo);
 
 const AnimScrollView = styled(Animated.ScrollView)`
     flex: 1;

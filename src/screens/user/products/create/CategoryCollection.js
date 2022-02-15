@@ -118,7 +118,7 @@ class CategoryCollection extends Component {
                         <DropDownPicker
                             loading={categoryLoading}
                             open={mainCategoryOpen}
-                            value={mainCategoryValue}
+                            value={product.category_id}
                             items={categories}
                             setOpen={this.setMainCategoryOpen}
                             setValue={this.setMainCategoryValue}
@@ -135,7 +135,7 @@ class CategoryCollection extends Component {
                         <DropDownPicker
                             loading={categoryLoading}
                             open={categoryOpen}
-                            value={categoryValue}
+                            value={product.other_categories}
                             multiple={true}
                             items={categories}
                             setOpen={this.setCategoryOpen}

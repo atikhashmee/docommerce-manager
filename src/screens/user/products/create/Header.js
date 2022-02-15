@@ -3,7 +3,7 @@ import {StyleSheet, View} from 'react-native';
 import {connect} from 'react-redux';
 import {Appbar} from 'react-native-paper';
 import {COLORS, icons} from '@constants';
-import {saveToDraft} from '@actions/productActions'
+import {saveToDraft, cancelOrDiscard} from '@actions/productActions'
 
 class Header extends Component {
     onPressBackButton = () => {
@@ -28,14 +28,26 @@ class Header extends Component {
                         this.props.token && <Appbar.Action icon={() => icons.align_left} onPress={() => this.props.navigation.openDrawer()} />
                     )}
                     <View style={{flex: 1}} />
-                    <Appbar.Content
-                        title={'Draft'}
-                        style={{flex: 0, justifyContent: 'flex-end', alignItems: 'flex-end'}}
-                        titleStyle={{color: COLORS.primary}}
-                        onPress={() => {
-                            this.props.saveToDraft()
-                        }}
-                    />
+                    <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
+                        <Appbar.Content
+                            title={'Cancel'}
+                            style={{flex: 0, justifyContent: 'flex-end', alignItems: 'flex-end'}}
+                            titleStyle={{color: COLORS.primary, fontSize: 14}}
+                            onPress={() => {
+                                this.props.cancelOrDiscard()
+                            }}
+                        />
+                        <Appbar.Content
+                            title={'Draft'}
+                            style={{flex: 0, justifyContent: 'flex-end', alignItems: 'flex-end'}}
+                            titleStyle={{color: COLORS.primary, fontSize: 14}}
+                            onPress={() => {
+                                this.props.saveToDraft()
+                            }}
+                        />
+                    </View>
+                    
+                    
                 </View>
             </Appbar.Header>
         );
@@ -61,4 +73,4 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default connect(mapStateToProps, {saveToDraft})(Header);
+export default connect(mapStateToProps, {saveToDraft, cancelOrDiscard})(Header);

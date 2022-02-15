@@ -10,7 +10,7 @@ import {connect} from 'react-redux';
 import { FAB, List, Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
 import AuthStorage from '@/core/session/AuthStorage';
 import APIKit from '../../../config/axios'
-import {removeDraft} from '@actions/productActions'
+import {removeDraft, setDraftItems} from '@actions/productActions'
 
 class Drafts extends Component {
     constructor(props) {
@@ -34,25 +34,24 @@ class Drafts extends Component {
             if (draftItems) {
                 items = JSON.parse(draftItems);
             }
-            this.setState({draftProducts: [...items]})
+            this.props.setDraftItems(items)
         })
     }
 
     
     render() {
-        const LeftContent = props => <Avatar.Icon {...props} icon="folder" />
-        const {draftProducts} = this.state
+        const {draft_products} = this.props
         return (
             <View style={Styles.container}>
                 <Header navigation={this.props.navigation} showBack={true} title="Drafts" />
                 <Spinner visible={this.state.spinner} textContent={'Loading...'} />
-                {draftProducts.length === 0 && (<AnimScrollView contentContainerStyle={{flexGrow: 1, justifyContent: 'center'}}>
+                {draft_products.length === 0 && (<AnimScrollView contentContainerStyle={{flexGrow: 1, justifyContent: 'center'}}>
                     <ImageBackground style={[styles.emptyBox, styles.noItemImageStyle]} source={require('@assets/img/empty_box.png')} resizeMode="cover">
                         <Text style={{alignSelf: 'center', marginTop: 'auto'}}>No Drafts Item found</Text>
                     </ImageBackground>
                 </AnimScrollView>)}
-                {draftProducts.length > 0 && <AnimScrollView>
-                        {draftProducts.map(({draft_id, draft_item}, itemk)  => (  <Card key={itemk} style={styles.cardStyle}>
+                {draft_products.length > 0 && <AnimScrollView>
+                        {draft_products.map(({draft_id, draft_item}, itemk)  => (  <Card key={itemk} style={styles.cardStyle}>
                             <Card.Content>
                                 <Title>{draft_item.name}</Title>
                             </Card.Content>
@@ -88,10 +87,11 @@ const mapStateToProps = (state) => {
     return {
         token: state.userReducer && state.userReducer.token,
         authUser: state.userReducer && state.userReducer.authUser,
+        draft_products: state.productReducer && state.productReducer.draft_products,
     };
 };
 
-export default connect(mapStateToProps, {removeDraft})(Drafts);
+export default connect(mapStateToProps, {removeDraft, setDraftItems})(Drafts);
 
 const AnimScrollView = styled(Animated.ScrollView)`
     flex: 1;
