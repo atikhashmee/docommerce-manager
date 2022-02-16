@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import AuthStorage from '@/core/session/AuthStorage';
 import * as RootNavigation from '@/navigations/RootNavigation';
 import {CommonActions} from '@react-navigation/native';
+import APIKit from '../../config/axios';
 
 
 export const handleProductObjProperty = (value, key, callba = null) => (dispatch, getState) => {
@@ -77,6 +78,7 @@ export const setDraftItems = (items) => (dispatch, getState) => {
 export const cancelOrDiscard = (items) => (dispatch, getState) => {
     //reset state product variable after draft
     dispatch({type: TYPES.SET_PRODUCT, payload: TYPES.PRODUCT_OBJ})
+    dispatch({type: TYPES.SET_PRODUCT_VALIDATION_ERRORS, payload: {}})
     RootNavigation.navigateRoute({
         'name' : 'HomeScreenStack',
         'params': {
@@ -91,8 +93,27 @@ export const cancelOrDiscard = (items) => (dispatch, getState) => {
       });
 };
 
-
-export const saveToServer = () => (dispatch, getState) => {
+export const saveToServer = (user) => (dispatch, getState) => {
     let product = {...getState().productReducer.product}
-    console.log(product, 'prod object........');
+    return new Promise((resolve, reject) => {
+        APIKit.post('/api/products/store', product)
+        .then((response) => {
+            let responsedata = response.data;
+            resolve(response);
+        })
+        .catch((error) => {
+            reject(error);
+        });
+    });
 };
+
+
+
+export const setValidationErrors = (errors) => (dispatch, getState) => {
+    dispatch({type: TYPES.SET_PRODUCT_VALIDATION_ERRORS, payload: errors})
+};
+export const filterError = (key_name) => (dispatch, getState) => {
+    let errors = {...getState().productReducer.errors}
+    return errors[key_name]
+};
+

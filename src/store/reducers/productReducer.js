@@ -3,7 +3,9 @@ import * as TYPES from '../actions/types';
 const initialState ={
     products: [],
     draft_products: [],
-    product: {...TYPES.PRODUCT_OBJ}
+    product: {...TYPES.PRODUCT_OBJ},
+    errors: {},
+    error: null,
 }
 
 const productReducer = (state=initialState, action) => {
@@ -17,6 +19,11 @@ const productReducer = (state=initialState, action) => {
             return {
                 ...state, 
                 draft_products: [...action.payload]
+            };
+        case TYPES.SET_PRODUCT_VALIDATION_ERRORS:
+            return {
+                ...state, 
+                errors: {...action.payload}
             };
         case TYPES.RESET_STATE:
             return initialState;

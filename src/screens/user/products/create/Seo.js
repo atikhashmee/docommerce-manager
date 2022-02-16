@@ -9,7 +9,7 @@ import Header from './Header';
 import Button from '@components/form/buttons/Button';
 import styled from 'styled-components/native';
 import {COLORS} from '@constants';
-import {handleProductObjProperty, cancelOrDiscard, saveToServer} from '@actions/productActions'
+import {handleProductObjProperty, cancelOrDiscard, saveToServer, setValidationErrors} from '@actions/productActions'
 import APIKit from '../../../../config/axios'
 
 const Style = StyleSheet.create({
@@ -29,6 +29,21 @@ class Seo extends Component {
 
     handleInputField(evt, key) {
         this.props.handleProductObjProperty(evt, key);
+    }
+
+    storeData() {
+        this.props.saveToServer().then(res => {
+            console.log(res, 'success..........');
+        }).catch(error=> {
+            let error_status = error.response.status;
+            let error_data = error.response.data;
+            if (error_status === 422) {
+                this.props.setValidationErrors(error_data)
+            } 
+            // else if (error_status === 401) {
+            //     ToastAndroid.show(error_data.error, ToastAndroid.SHORT);
+            // }
+        })
     }
 
     render() {
@@ -67,7 +82,7 @@ class Seo extends Component {
                                 </Button>
                             </View>
                             <View style={Styles.col6}>
-                                <Button onPress={() => { this.props.saveToServer() }} style={styles.button} containerStyle={styles.buttonInner}>
+                                <Button onPress={() => { this.storeData() }} style={styles.button} containerStyle={styles.buttonInner}>
                                     <Button.Text style={styles.btnText}>Save</Button.Text>
                                 </Button>
                             </View>
@@ -87,7 +102,7 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default connect(mapStateToProps, {handleProductObjProperty, cancelOrDiscard, saveToServer})(Seo);
+export default connect(mapStateToProps, {handleProductObjProperty, cancelOrDiscard, saveToServer, setValidationErrors})(Seo);
 
 const AnimScrollView = styled(Animated.ScrollView)`
     flex: 1;

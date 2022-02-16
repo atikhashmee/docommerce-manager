@@ -12,7 +12,7 @@ import TagInput from 'react-native-tags-input';
 import { Switch } from 'react-native-paper';
 import APIKit from '../../../../config/axios'
 import DropDownPicker from 'react-native-dropdown-picker';
-import {handleProductObjProperty} from '@actions/productActions'
+import {handleProductObjProperty, filterError} from '@actions/productActions'
 
 const mainColor = '#3ca897';
 
@@ -107,6 +107,9 @@ class CategoryCollection extends Component {
     render() {
         const { spinner, mainCategoryOpen, categoryLoading, mainCategoryValue, categoryOpen, categoryValue, categories } = this.state;
         const {  product } = this.props;
+        const errorDisplay = (keyName) => this.props.filterError(keyName)?
+        this.props.filterError(keyName).map((err, errKey)=><Text key={errKey} style={{color: 'red'}}>{err}</Text>) : 
+        <Text style={{color: 'red'}}>{''}</Text>;
         return (
             <View style={Styles.container}>
                 <Header navigation={this.props.navigation} title="Add New Product" showBack={true} />
@@ -114,7 +117,7 @@ class CategoryCollection extends Component {
                 <AnimScrollView style={[Styles.topContainer]}>
                     <Styles.PageHeader>Category & Collection</Styles.PageHeader>
                     <FormGroup style={styles.formGroupStyle}>
-                        <FormGroup.Label style={Styles.formLabel}>Main Category</FormGroup.Label>
+                        <FormGroup.Label style={Styles.formLabel}>Main Category<Text style={{color: 'red'}}>*</Text></FormGroup.Label>
                         <DropDownPicker
                             loading={categoryLoading}
                             open={mainCategoryOpen}
@@ -129,6 +132,7 @@ class CategoryCollection extends Component {
                             zIndexInverse={1000}
                             listMode="SCROLLVIEW" 
                         />
+                    {errorDisplay('category_id')}
                     </FormGroup>
                     <FormGroup style={styles.formGroupStyle}>
                         <FormGroup.Label style={Styles.formLabel}>Categories</FormGroup.Label>
@@ -147,7 +151,7 @@ class CategoryCollection extends Component {
                             zIndexInverse={2000}
                             listMode="SCROLLVIEW" 
                         />
-                        
+                    {errorDisplay('other_categories')}
                     </FormGroup>
                     <FormGroup style={styles.formGroupStyle}>
                         <FormGroup.Label style={Styles.formLabel}>Tags</FormGroup.Label>
@@ -166,6 +170,7 @@ class CategoryCollection extends Component {
                             keysForTag={', '}
                         />
                         <Text style={{fontSize: 10, marginLeft: 3}}>Press comma & space to add a tag</Text>
+                        {errorDisplay('tags')}
                     </FormGroup>
                     <FormGroup>
                         <FormGroup.Label style={Styles.formLabel}>Show on Featured Collection</FormGroup.Label>
@@ -176,6 +181,7 @@ class CategoryCollection extends Component {
                             }} />
                             <SwithText>ON</SwithText>
                         </SwitchWrapper>
+                        {errorDisplay('feature')}
                     </FormGroup>
                     <FormGroup>
                         <FormGroup.Label style={Styles.formLabel}>Show on New Arrival Collection</FormGroup.Label>
@@ -186,6 +192,7 @@ class CategoryCollection extends Component {
                             }} />
                             <SwithText>ON</SwithText>
                         </SwitchWrapper>
+                        {errorDisplay('new_arrival')}
                     </FormGroup>
                 </AnimScrollView>
             </View>
@@ -201,7 +208,7 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default connect(mapStateToProps, {handleProductObjProperty})(CategoryCollection);
+export default connect(mapStateToProps, {handleProductObjProperty, filterError})(CategoryCollection);
 
 const AnimScrollView = styled(Animated.ScrollView)`
     flex: 1;

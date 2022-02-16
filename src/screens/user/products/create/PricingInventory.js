@@ -209,7 +209,7 @@ class PricingInventory extends Component {
                                 </View>
                                 <View style={Styles.col6}>
                                     <FormGroup style={styles.formGroupStyle}>
-                                        <FormGroup.Label style={Styles.formLabel}>Selling Price</FormGroup.Label>
+                                        <FormGroup.Label style={Styles.formLabel}>Selling Price<Text style={{color: 'red'}}>*</Text></FormGroup.Label>
                                         <FormGroup.InputGroup style={Styles.inputGroupStyle}>
                                             <FormGroup.TextInput  keyboardType="number-pad" onChangeText={(val) => this.handleInputField(val, 'price')} onBlur={() => this.calculateProfit()} value={String(product.price)} />
                                         </FormGroup.InputGroup>
@@ -217,7 +217,7 @@ class PricingInventory extends Component {
                                 </View>
                                 <View style={Styles.col6}>
                                     <FormGroup style={styles.formGroupStyle}>
-                                        <FormGroup.Label style={Styles.formLabel}>Product Cost</FormGroup.Label>
+                                        <FormGroup.Label style={Styles.formLabel}>Product Cost<Text style={{color: 'red'}}>*</Text></FormGroup.Label>
                                         <FormGroup.InputGroup style={Styles.inputGroupStyle}>
                                             <FormGroup.TextInput  keyboardType="number-pad" onChangeText={(val) => this.handleInputField(val, 'cost')} onBlur={() => this.calculateProfit()} value={String(product.cost)} />
                                         </FormGroup.InputGroup>
@@ -236,7 +236,7 @@ class PricingInventory extends Component {
                             <View style={Styles.row}>
                                 <View style={Styles.col6}>
                                     <FormGroup style={styles.formGroupStyle}>
-                                        <FormGroup.Label style={Styles.formLabel}>Initial Stock Quantity</FormGroup.Label>
+                                        <FormGroup.Label style={Styles.formLabel}>Initial Stock Quantity<Text style={{color: 'red'}}>*</Text></FormGroup.Label>
                                         <FormGroup.InputGroup style={Styles.inputGroupStyle}>
                                             <FormGroup.TextInput  keyboardType="number-pad" onChangeText={(val) => this.handleInputField(val, 'initial_stock_qty')} value={String(product.initial_stock_qty)} />
                                         </FormGroup.InputGroup>
@@ -244,7 +244,7 @@ class PricingInventory extends Component {
                                 </View>
                                 <View style={Styles.col6}>
                                     <FormGroup style={styles.formGroupStyle}>
-                                        <FormGroup.Label style={Styles.formLabel}>SKU</FormGroup.Label>
+                                        <FormGroup.Label style={Styles.formLabel}>SKU<Text style={{color: 'red'}}>*</Text></FormGroup.Label>
                                         <FormGroup.InputGroup style={Styles.inputGroupStyle}>
                                             <FormGroup.TextInput onChangeText={(val) => this.handleInputField(val, 'sku')} value={product.sku} />
                                         </FormGroup.InputGroup>
@@ -252,7 +252,7 @@ class PricingInventory extends Component {
                                 </View>
                                 <View style={Styles.col6}>
                                 <FormGroup style={styles.formGroupStyle}>
-                                    <FormGroup.Label style={Styles.formLabel}>Warehouse</FormGroup.Label>
+                                    <FormGroup.Label style={Styles.formLabel}>Warehouse<Text style={{color: 'red'}}>*</Text></FormGroup.Label>
                                     <DropDownPicker
                                         open={warehouseOpen}
                                         value={warehouseValue}
